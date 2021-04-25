@@ -3,7 +3,6 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"wxauth/models"
 )
 
@@ -35,21 +34,118 @@ func Init(db *sql.DB) *DataStore {
 }
 
 func (store *DataStore) InsertUser(user models.UserDataModel) {
-	stmt, err := store.DB.Prepare(`
+
+	sql, err := store.DB.Prepare(`
 		INSERT INTO "users" (Email, Token, Role, Services) values (?, ?, ?, ?)
 	`)
 	if err != nil {
-		log.Fatal("Insert user error")
+		fmt.Println("Insert user error")
 	}
-	stmt.Exec(user.Email, user.Token, user.UserRole, user.Services)
+
+	trans, err := store.DB.Begin()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	_, err = trans.Stmt(sql).Exec(user.Email, user.Token, user.UserRole, user.Services)
+	if err != nil {
+		fmt.Println("Doing rollback")
+		trans.Rollback()
+	} else {
+		trans.Commit()
+	}
 }
 
-func (store *DataStore) UpdateUser(user models.User) {
+func (store *DataStore) UpdateMail(user models.UserDataModel, newEmail string) {
 
+	sql, err := store.DB.Prepare(`
+		UPDATE users SET Email=? WHERE ID=?
+	`)
+	if err != nil {
+		fmt.Println("Update email error.")
+	}
+
+	trans, err := store.DB.Begin()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	_, err = trans.Stmt(sql).Exec(newEmail, user.ID)
+	if err != nil {
+		fmt.Println("Doing rollback")
+		trans.Rollback()
+	} else {
+		trans.Commit()
+	}
 }
 
-func (store *DataStore) DeleteUser(user models.User) {
+func (store *DataStore) UpdateToken(user models.UserDataModel, newToken string) {
 
+	sql, err := store.DB.Prepare(`
+		UPDATE users SET Token=? WHERE ID=?
+	`)
+	if err != nil {
+		fmt.Println("Update token error.")
+	}
+
+	trans, err := store.DB.Begin()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	_, err = trans.Stmt(sql).Exec(newToken, user.ID)
+	if err != nil {
+		fmt.Println("Doing rollback")
+		trans.Rollback()
+	} else {
+		trans.Commit()
+	}
+}
+
+func (store *DataStore) UpdateServices(user models.UserDataModel, services string) {
+
+	sql, err := store.DB.Prepare(`
+		UPDATE users SET Services=? WHERE ID=?
+	`)
+	if err != nil {
+		fmt.Println("Update services error.")
+	}
+
+	trans, err := store.DB.Begin()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	_, err = trans.Stmt(sql).Exec(services, user.ID)
+	if err != nil {
+		fmt.Println("Doing rollback")
+		trans.Rollback()
+	} else {
+		trans.Commit()
+	}
+}
+
+func (store *DataStore) DeleteUser(user models.UserDataModel) {
+
+	sql, err := store.DB.Prepare(`
+		DELETE FROM users WHERE ID=?
+	`)
+	if err != nil {
+		fmt.Println("Update services error.")
+	}
+
+	trans, err := store.DB.Begin()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	_, err = trans.Stmt(sql).Exec(user.ID)
+	if err != nil {
+		fmt.Println("Doing rollback")
+		trans.Rollback()
+	} else {
+		trans.Commit()
+	}
 }
 
 func (store *DataStore) GetUser(userEmail string) models.UserDataModel {
@@ -60,7 +156,7 @@ func (store *DataStore) GetUser(userEmail string) models.UserDataModel {
 	`)
 
 	if err != nil {
-		log.Fatal("Query users failed.")
+		fmt.Println("Query users failed.")
 	}
 	var id int
 	var email string
@@ -83,6 +179,7 @@ func (store *DataStore) GetUser(userEmail string) models.UserDataModel {
 			break
 		}
 	}
+	rows.Close()
 	return user
 }
 
@@ -94,7 +191,7 @@ func (store *DataStore) ReadUsers() []models.UserDataModel {
 	`)
 
 	if err != nil {
-		log.Fatal("Query users failed.")
+		fmt.Println("Query users failed.")
 	}
 	var id int
 	var email string
@@ -102,9 +199,7 @@ func (store *DataStore) ReadUsers() []models.UserDataModel {
 	var role string
 	var services string
 
-	for rows.Next() {
-		fmt.Println("Rows has next.")
-
+	if rows.Next() {
 		rows.Scan(&id, &email, &token, &role, &services)
 		userDm := models.UserDataModel{
 			ID:       id,
@@ -113,8 +208,8 @@ func (store *DataStore) ReadUsers() []models.UserDataModel {
 			UserRole: role,
 			Services: services,
 		}
-		fmt.Printf("user email: %s\n", userDm.Email)
 		userList = append(userList, userDm)
 	}
+	rows.Close()
 	return userList
 }

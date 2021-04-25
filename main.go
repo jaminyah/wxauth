@@ -45,8 +45,16 @@ func main() {
 		fmt.Printf("%v, %s, %s, %s, %s\n", user.ID, user.Email, user.Token, user.UserRole, user.Services)
 	}
 
-	userDm := userDB.GetUser("der@mail.com")
-	fmt.Printf("%v, %s, %s, %s, %s\n", userDm.ID, userDm.Email, userDm.Token, userDm.UserRole, userDm.Services)
+	userDm2 = userDB.GetUser("der@mail.com")
+	fmt.Printf("%v, %s, %s, %s, %s\n", userDm2.ID, userDm2.Email, userDm2.Token, userDm2.UserRole, userDm2.Services)
+
+	userDB.UpdateMail(userDm2, "drk@gmail.com")
+
+	userDB.UpdateToken(userDm2, "ejB1234")
+
+	userDm1 = userDB.GetUser("jan@mail.com")
+	userDB.DeleteUser(userDm1)
+
 	fmt.Println()
 	/*
 		fmt.Println(models.Client, models.Admin, models.Notify, models.WebRTC, models.UserLogs)
