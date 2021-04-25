@@ -39,6 +39,15 @@ func main() {
 	}
 
 	userDB.InsertUser(userDm2)
+
+	userDms := userDB.ReadUsers()
+	for _, user := range userDms {
+		fmt.Printf("%v, %s, %s, %s, %s\n", user.ID, user.Email, user.Token, user.UserRole, user.Services)
+	}
+
+	userDm := userDB.GetUser("der@mail.com")
+	fmt.Printf("%v, %s, %s, %s, %s\n", userDm.ID, userDm.Email, userDm.Token, userDm.UserRole, userDm.Services)
+	fmt.Println()
 	/*
 		fmt.Println(models.Client, models.Admin, models.Notify, models.WebRTC, models.UserLogs)
 
