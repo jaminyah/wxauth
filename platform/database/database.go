@@ -3,19 +3,20 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"wxauth/models"
 )
 
-type DataStore struct {
+type DbHandle struct {
 	DB *sql.DB
 }
 
-func Init(db *sql.DB) *DataStore {
+func CreateTable(db *sql.DB) (*DbHandle, error) {
 
 	stmt, err := db.Prepare(`
 		CREATE TABLE IF NOT EXISTS "users" (
 			"ID" INTEGER UNIQUE,
-			"Email" TEXT,
+			"Email" TEXT UNIQUE,
 			"Token" TEXT,
 			"Role" TEXT,
 			"Services" TEXT,
@@ -24,25 +25,26 @@ func Init(db *sql.DB) *DataStore {
 	`)
 
 	if err != nil {
-		fmt.Println("Database not created.")
+		log.Fatal("Database not created.")
 	}
 
-	stmt.Exec()
-	return &DataStore{
+	_, err = stmt.Exec()
+
+	return &DbHandle{
 		DB: db,
-	}
+	}, err
 }
 
-func (store *DataStore) InsertUser(user models.UserDataModel) {
+func (handle *DbHandle) InsertUser(user models.UserDataModel) error {
 
-	sql, err := store.DB.Prepare(`
+	sql, err := handle.DB.Prepare(`
 		INSERT INTO "users" (Email, Token, Role, Services) values (?, ?, ?, ?)
 	`)
 	if err != nil {
 		fmt.Println("Insert user error")
 	}
 
-	trans, err := store.DB.Begin()
+	trans, err := handle.DB.Begin()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -54,18 +56,20 @@ func (store *DataStore) InsertUser(user models.UserDataModel) {
 	} else {
 		trans.Commit()
 	}
+
+	return err
 }
 
-func (store *DataStore) UpdateMail(user models.UserDataModel, newEmail string) {
+func (handle *DbHandle) UpdateMail(user models.UserDataModel, newEmail string) error {
 
-	sql, err := store.DB.Prepare(`
+	sql, err := handle.DB.Prepare(`
 		UPDATE users SET Email=? WHERE ID=?
 	`)
 	if err != nil {
 		fmt.Println("Update email error.")
 	}
 
-	trans, err := store.DB.Begin()
+	trans, err := handle.DB.Begin()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -77,18 +81,20 @@ func (store *DataStore) UpdateMail(user models.UserDataModel, newEmail string) {
 	} else {
 		trans.Commit()
 	}
+
+	return err
 }
 
-func (store *DataStore) UpdateToken(user models.UserDataModel, newToken string) {
+func (handle *DbHandle) UpdateToken(user models.UserDataModel, newToken string) error {
 
-	sql, err := store.DB.Prepare(`
+	sql, err := handle.DB.Prepare(`
 		UPDATE users SET Token=? WHERE ID=?
 	`)
 	if err != nil {
 		fmt.Println("Update token error.")
 	}
 
-	trans, err := store.DB.Begin()
+	trans, err := handle.DB.Begin()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -100,18 +106,20 @@ func (store *DataStore) UpdateToken(user models.UserDataModel, newToken string) 
 	} else {
 		trans.Commit()
 	}
+
+	return err
 }
 
-func (store *DataStore) UpdateServices(user models.UserDataModel, services string) {
+func (handle *DbHandle) UpdateServices(user models.UserDataModel, services string) error {
 
-	sql, err := store.DB.Prepare(`
+	sql, err := handle.DB.Prepare(`
 		UPDATE users SET Services=? WHERE ID=?
 	`)
 	if err != nil {
 		fmt.Println("Update services error.")
 	}
 
-	trans, err := store.DB.Begin()
+	trans, err := handle.DB.Begin()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -123,35 +131,39 @@ func (store *DataStore) UpdateServices(user models.UserDataModel, services strin
 	} else {
 		trans.Commit()
 	}
+
+	return err
 }
 
-func (store *DataStore) DeleteUser(user models.UserDataModel) {
+func (handle *DbHandle) DeleteUser(userEmail string) error {
 
-	sql, err := store.DB.Prepare(`
-		DELETE FROM users WHERE ID=?
+	sql, err := handle.DB.Prepare(`
+		DELETE FROM users WHERE Email=?
 	`)
 	if err != nil {
 		fmt.Println("Update services error.")
 	}
 
-	trans, err := store.DB.Begin()
+	trans, err := handle.DB.Begin()
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	_, err = trans.Stmt(sql).Exec(user.ID)
+	_, err = trans.Stmt(sql).Exec(userEmail)
 	if err != nil {
 		fmt.Println("Doing rollback")
 		trans.Rollback()
 	} else {
 		trans.Commit()
 	}
+
+	return err
 }
 
-func (store *DataStore) GetUser(userEmail string) models.UserDataModel {
+func (handle *DbHandle) GetUser(userEmail string) (models.UserDataModel, error) {
 
 	user := models.UserDataModel{}
-	rows, err := store.DB.Query(`
+	rows, err := handle.DB.Query(`
 		SELECT * FROM users
 	`)
 
@@ -180,13 +192,13 @@ func (store *DataStore) GetUser(userEmail string) models.UserDataModel {
 		}
 	}
 	rows.Close()
-	return user
+	return user, err
 }
 
-func (store *DataStore) ReadUsers() []models.UserDataModel {
+func (handle *DbHandle) ReadUsers() ([]models.UserDataModel, error) {
 
 	userList := []models.UserDataModel{}
-	rows, err := store.DB.Query(`
+	rows, err := handle.DB.Query(`
 		SELECT * FROM users
 	`)
 
@@ -199,7 +211,7 @@ func (store *DataStore) ReadUsers() []models.UserDataModel {
 	var role string
 	var services string
 
-	if rows.Next() {
+	for rows.Next() {
 		rows.Scan(&id, &email, &token, &role, &services)
 		userDm := models.UserDataModel{
 			ID:       id,
@@ -211,5 +223,6 @@ func (store *DataStore) ReadUsers() []models.UserDataModel {
 		userList = append(userList, userDm)
 	}
 	rows.Close()
-	return userList
+
+	return userList, err
 }

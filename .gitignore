@@ -3,3 +3,4 @@
 
 # Database
 *.db
+*_test.db
