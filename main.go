@@ -2,7 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"wxauth/platform/database"
 
@@ -19,9 +21,14 @@ func main() {
 	}
 	defer conn.Close()
 
-	userTbl, err := database.CreateTable(conn)
+	/*userTbl*/
+	_, err = database.CreateTable(conn)
 	if err != nil {
 		log.Fatal("cannot initialize database.")
 	}
 
+	fileServer := http.FileServer(http.Dir("./static"))
+	http.Handle("/", fileServer)
+	fmt.Println("Server on port 8090")
+	http.ListenAndServe(":8090", nil)
 }
