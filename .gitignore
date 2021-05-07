@@ -4,3 +4,6 @@
 # Database
 *.db
 *_test.db
+
+rice-box.go
+wxauth

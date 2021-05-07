@@ -2,11 +2,13 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"wxauth/platform/database"
+
+	rice "github.com/GeertJohan/go.rice"
+	"github.com/gorilla/mux"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -27,8 +29,13 @@ func main() {
 		log.Fatal("cannot initialize database.")
 	}
 
-	fileServer := http.FileServer(http.Dir("./static"))
-	http.Handle("/", fileServer)
-	fmt.Println("Server on port 8090")
-	http.ListenAndServe(":8090", nil)
+	/*
+		fileServer := http.FileServer(http.Dir("./static"))
+		http.Handle("/", fileServer)
+		fmt.Println("Server on port 8090")
+		http.ListenAndServe(":8090", nil)
+	*/
+	router := mux.NewRouter()
+	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("static").HTTPBox()))
+	log.Fatal(http.ListenAndServe(":8090", router))
 }
