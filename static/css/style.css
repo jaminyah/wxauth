@@ -43,6 +43,9 @@ body h1 {
 	margin-top: 20px;
 }
 
+.form-content .float-right {
+    float: right;
+}
 
 .container .footer {
 	margin: 40px 0;
