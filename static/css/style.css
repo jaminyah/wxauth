@@ -47,8 +47,8 @@ body h1 {
     float: right;
 }
 
-.container .footer {
-	margin: 40px 0;
-	color: #888;
-	text-align: center;
+.page-footer {
+    background-color: deepskyblue;
+    color: #000000;
+    padding: 60px 10px 60px;
 }

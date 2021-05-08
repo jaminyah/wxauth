@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./css/bulma.min.css" />
     <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
 
-    <title>Form Centering</title>
+    <title>Login</title>
 </head>
 <body>
     <div class="container">
@@ -41,7 +41,7 @@
                     </div>
                     <div class="field">
                         <p class="control">
-                            <button class="button is-success">Login</button>
+                            <button class="button is-info">Login</button>
                         </p>
                         <div class="margin-top20 text-center">
                             Don't have an account? <a href="register.html">Create One</a>
@@ -51,8 +51,21 @@
             </div>
         </div>
     </div>
-    <div class="footer">
-        Copyright &copy; WxAlert 2021
+    <div class="page-footer">
+        <p>&copy; <span id="timestamp"></span>&nbsp;WxAlert</p>
+        <script>
+            document.onreadystatechange = () => {
+                if (document.readyState === 'complete') {
+                        writeYear()
+                    }
+            };
+
+            function writeYear() {
+                var date = new Date();
+                var year = date.getFullYear();
+                document.getElementById("timestamp").innerHTML = year;
+            }
+        </script>
     </div>
 </body>
 </html>

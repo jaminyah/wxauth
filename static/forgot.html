@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./css/bulma.min.css" />
     <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
 
-    <title>Form Centering</title>
+    <title>Forgot</title>
 </head>
 <body>
     <div class="container">
@@ -30,19 +30,32 @@
                         <span class="icon is-small is-left">
                             <i class="fas fa-info-circle"></i>
                         </span>
-                        Click "Reset Password" to receive a password reset link via email.
+                        Click "Reset Password" to receive a password reset code by email.
                     </div>
                     <div class="field margin-top10">
                         <p class="control">
-                            <button class="button is-success">Reset Password</button>
+                            <button class="button is-info">Forgot Password</button>
                         </p>
                     </div>							 
                 </form>
             </div>
         </div>
     </div>
-    <div class="footer">
-        Copyright &copy; WxAlert 2021
+    <div class="page-footer">
+        <p>&copy; <span id="timestamp"></span>&nbsp;WxAlert</p>
+        <script>
+            document.onreadystatechange = () => {
+                if (document.readyState === 'complete') {
+                        writeYear()
+                    }
+            };
+
+            function writeYear() {
+                var date = new Date();
+                var year = date.getFullYear();
+                document.getElementById("timestamp").innerHTML = year;
+            }
+        </script>
     </div>
 </body>
 </html>

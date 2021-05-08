@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./css/bulma.min.css" />
     <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
 
-    <title>Form Centering</title>
+    <title>Register</title>
 </head>
 <body>
     <div class="container">
@@ -47,18 +47,32 @@
                     <label class="checkbox">
                         <input type="checkbox">
                         I agree to the <a href="#">terms and conditions</a>
-                      </label>
+                    </label>
                     <div class="field margin-top10">
                         <p class="control">
-                            <button class="button is-success">Register</button>
+                            <button class="button is-info">Register</button>
                         </p>
-                    </div>							 
+                    </div>						 
                 </form>
             </div>
         </div>
     </div>
-    <div class="footer">
-        Copyright &copy; WxAlert 2021
+    <script src="./scripts/register.js"></script>
+    <div class="page-footer">
+        <p>&copy; <span id="timestamp"></span>&nbsp;WxAlert</p>
+        <script>
+            document.onreadystatechange = () => {
+                if (document.readyState === 'complete') {
+                        writeYear()
+                    }
+            };
+
+            function writeYear() {
+                var date = new Date();
+                var year = date.getFullYear();
+                document.getElementById("timestamp").innerHTML = year;
+            }
+        </script>
     </div>
 </body>
 </html>

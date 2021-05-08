@@ -37,5 +37,14 @@ func main() {
 	*/
 	router := mux.NewRouter()
 	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("static").HTTPBox()))
+
+	router.Handle("/api/login", Login).Methods("POST")
+	router.Handle("/api/register", Register).Methods("POST")
+	router.Handle("/api/confirm", Confirm).Methods("Post")
+	router.Handle("/api/forgot", Forgot).Methods("POST")
+	router.Handle("/api/reset", Reset).Methods("POST")
+	router.Handle("/api/getCaptcha", Login).Methods("POST")
+	router.Handle("/api/verifyCaptcha", Register).Methods("POST")
+
 	log.Fatal(http.ListenAndServe(":8090", router))
 }
