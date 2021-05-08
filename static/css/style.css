@@ -26,8 +26,25 @@ body h1 {
     background-color: #f7f9fb;
 }
 
+.box {
+    width: 400px;
+    height: 540px;
+    font-size: 14px;
+    color: black;
+    background-color: #f7f9fb;
+}
+
+.box h1 {
+    text-align: center;
+}
+
 .card h1 {
     text-align: center;
+}
+
+.captcha {
+    width: 100px;
+    height: 44px;
 }
 
 .form-content {
