@@ -43,8 +43,9 @@ func main() {
 	router.Handle("/api/confirm", Confirm).Methods("Post")
 	router.Handle("/api/forgot", Forgot).Methods("POST")
 	router.Handle("/api/reset", Reset).Methods("POST")
-	router.Handle("/api/getCaptcha", Login).Methods("POST")
-	router.Handle("/api/verifyCaptcha", Register).Methods("POST")
+	router.Handle("/api/logout", Logout).Methods("POST")
+	router.Handle("/api/getCaptcha", GetCaptcha).Methods("GET")
+	router.Handle("/api/verifyCaptcha", VerifyCaptcha).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8090", router))
 }
