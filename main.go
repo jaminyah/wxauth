@@ -2,9 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"wxauth/handlers"
 	"wxauth/platform/database"
 
 	rice "github.com/GeertJohan/go.rice"
@@ -38,14 +40,15 @@ func main() {
 	router := mux.NewRouter()
 	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("static").HTTPBox()))
 
-	router.Handle("/api/login", Login).Methods("POST")
-	router.Handle("/api/register", Register).Methods("POST")
-	router.Handle("/api/confirm", Confirm).Methods("Post")
-	router.Handle("/api/forgot", Forgot).Methods("POST")
-	router.Handle("/api/reset", Reset).Methods("POST")
-	router.Handle("/api/logout", Logout).Methods("POST")
-	router.Handle("/api/getCaptcha", GetCaptcha).Methods("GET")
-	router.Handle("/api/verifyCaptcha", VerifyCaptcha).Methods("POST")
+	router.HandleFunc("/api/login", handlers.Login).Methods("POST")
+	router.HandleFunc("/api/register", handlers.Register).Methods("POST")
+	router.HandleFunc("/api/confirm", handlers.Confirm).Methods("Post")
+	router.HandleFunc("/api/forgot", handlers.Forgot).Methods("POST")
+	router.HandleFunc("/api/reset", handlers.Reset).Methods("POST")
+	router.HandleFunc("/api/logout", handlers.Logout).Methods("POST")
+	router.HandleFunc("api/getCaptcha", handlers.GetCaptcha).Methods("GET")
+	router.HandleFunc("/api/verifyCaptcha", handlers.VerifyCaptcha).Methods("POST")
 
+	fmt.Println("Server on port: 8090")
 	log.Fatal(http.ListenAndServe(":8090", router))
 }

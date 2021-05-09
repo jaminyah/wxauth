@@ -16,7 +16,7 @@
         <div class="box">
             <h1>Register</h1>
             <div class="form-content">
-                <form method="POST">
+                <form method="POST" action="">
                     <div class="field">
                         <label for="email">E-Mail Address</label>
                         <p class="control has-icons-left has-icons-right">
@@ -44,10 +44,10 @@
                         </span>
                         </p>
                     </div>
-                    <div class="captcha margin-top20">Captcha code</div>
+                    <div class="captcha margin-top20" id="captcha-img"></div>
                     <div class="field has-addons">
                         <div class="control">
-                          <input class="input" type="text" placeholder="Captcha code">
+                          <input class="input" type="text" placeholder="Captcha code" required />
                         </div>
                         <div class="control">
                           <a class="button is-success">Verify</a>
@@ -66,7 +66,6 @@
             </div>
         </div>
     </div>
-    <script src="./scripts/register.js"></script>
     <div class="page-footer">
         <p>&copy; <span id="timestamp"></span>&nbsp;WxAlert</p>
         <script>
@@ -82,6 +81,8 @@
                 document.getElementById("timestamp").innerHTML = year;
             }
         </script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="./scripts/register.js"></script>
     </div>
 </body>
 </html>
