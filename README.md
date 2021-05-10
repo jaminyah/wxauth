@@ -1,4 +1,4 @@
-# Golang authenication service using SQLite3 database.
+# Golang authentication service using SQLite3 database.
 
 ## Authentication system architecture
 
