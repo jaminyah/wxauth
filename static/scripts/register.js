@@ -50,7 +50,7 @@ blob: "",
 
 $(document).ready(function() {
     $("#captcha-solution").val("");
-    $("#message").val("");
+    //$("#message").val("");
 
     generateCaptcha()
 });
@@ -63,7 +63,7 @@ function displayCaptcha(captcha) {
 
 function generateCaptcha() {
     console.log('Generating captcha');
-    const url = '/api/getCaptcha';
+    const url = '/api/getcaptcha';
     var blob = "";
 
     let fetchData = {
@@ -117,7 +117,7 @@ function verifyCaptcha() {
     captchaForm.VerifyValue = document.getElementById("captcha-solution").value;
     console.log(captchaForm.VerifyValue)
 
-    const url = '/api/verifyCaptcha';
+    const url = '/api/verifycaptcha';
 
     let fetchData = {
         method: 'post',

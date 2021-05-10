@@ -1,12 +1,19 @@
-package handlers
+package main
 
-/*
-var store = base64Captcha.DefaultMemStore
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"wxauth/models"
+
+	"github.com/mojocn/base64Captcha"
+)
 
 // base64Captcha create http handler
-func GenCaptcha(w http.ResponseWriter, r *http.Request) {
+func genCaptcha(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("Generating captcha")
+	fmt.Println("GenCaptcha")
 
 	decoder := json.NewDecoder(r.Body)
 	var param models.ConfigJsonBody
@@ -41,4 +48,3 @@ func GenCaptcha(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json.NewEncoder(w).Encode(body)
 }
-*/
