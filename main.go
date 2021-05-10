@@ -46,7 +46,7 @@ func main() {
 	router.HandleFunc("/api/forgot", handlers.Forgot).Methods("POST")
 	router.HandleFunc("/api/reset", handlers.Reset).Methods("POST")
 	router.HandleFunc("/api/logout", handlers.Logout).Methods("POST")
-	router.HandleFunc("api/getCaptcha", handlers.GetCaptcha).Methods("GET")
+	router.HandleFunc("api/getCaptcha", handlers.GenCaptcha).Methods("GET")
 	router.HandleFunc("/api/verifyCaptcha", handlers.VerifyCaptcha).Methods("POST")
 
 	fmt.Println("Server on port: 8090")

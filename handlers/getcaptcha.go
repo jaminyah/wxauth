@@ -4,29 +4,18 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"wxauth/models"
 
 	"github.com/mojocn/base64Captcha"
 )
 
 var store = base64Captcha.DefaultMemStore
 
-//configJsonBody json request body.
-type configJsonBody struct {
-	Id            string
-	CaptchaType   string
-	VerifyValue   string
-	DriverAudio   *base64Captcha.DriverAudio
-	DriverString  *base64Captcha.DriverString
-	DriverChinese *base64Captcha.DriverChinese
-	DriverMath    *base64Captcha.DriverMath
-	DriverDigit   *base64Captcha.DriverDigit
-}
-
 // base64Captcha create http handler
-func GetCaptcha(w http.ResponseWriter, r *http.Request) {
+func GenCaptcha(w http.ResponseWriter, r *http.Request) {
 
 	decoder := json.NewDecoder(r.Body)
-	var param configJsonBody
+	var param models.ConfigJsonBody
 
 	err := decoder.Decode(&param)
 	if err != nil {
