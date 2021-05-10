@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/bulma.min.css" />
     <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" 
+    crossorigin="anonymous">
+    </script>
 
     <title>Register</title>
 </head>
@@ -47,10 +50,10 @@
                     <div class="captcha margin-top20" id="captcha-img"></div>
                     <div class="field has-addons">
                         <div class="control">
-                          <input class="input" type="text" placeholder="Captcha code" required />
+                          <input class="input" type="text" id="captcha-solution" placeholder="captcha code" required />
                         </div>
                         <div class="control">
-                          <a class="button is-success">Verify</a>
+                          <a class="button is-success" onclick="verifyCaptcha()">Verify</a>
                         </div>
                       </div>
                     <label class="checkbox">
@@ -66,6 +69,7 @@
             </div>
         </div>
     </div>
+    <script src="scripts/register.js"></script>
     <div class="page-footer">
         <p>&copy; <span id="timestamp"></span>&nbsp;WxAlert</p>
         <script>
@@ -81,8 +85,6 @@
                 document.getElementById("timestamp").innerHTML = year;
             }
         </script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="./scripts/register.js"></script>
     </div>
 </body>
 </html>

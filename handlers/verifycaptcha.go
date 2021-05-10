@@ -1,12 +1,6 @@
 package handlers
 
-import (
-	"encoding/json"
-	"log"
-	"net/http"
-	"wxauth/models"
-)
-
+/*
 func VerifyCaptcha(w http.ResponseWriter, r *http.Request) {
 
 	//parse request json body
@@ -28,4 +22,4 @@ func VerifyCaptcha(w http.ResponseWriter, r *http.Request) {
 	//set json response
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json.NewEncoder(w).Encode(body)
-}
+}*/
