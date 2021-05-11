@@ -49,24 +49,28 @@
                         </span>
                         </p>
                     </div>
-                    <div class="captcha margin-top20" id="captcha-img"></div>
-                    <div class="field has-addons">
-                        <div class="control">
-                          <input class="input" type="text" id="captcha-solution" placeholder="captcha code" required />
+                    <div id="captcha-blk">
+                        <div class="captcha margin-top20" id="captcha-img"></div>
+                        <div class="field has-addons">
+                            <div class="control">
+                              <input class="input" type="text" id="captcha-solution" placeholder="captcha code" 
+                              required />
+                            </div>
+                            <div class="control">
+                              <a class="button is-success" onclick="verifyCaptcha()">Verify</a>
+                            </div>
                         </div>
-                        <div class="control">
-                          <a class="button is-success" onclick="verifyCaptcha()">Verify</a>
-                        </div>
-                      </div>
-                    <label class="checkbox">
-                        <input type="checkbox">
-                        I agree to the <a href="#">terms and conditions</a>
-                    </label>
+                    </div>
+                    <div class="form-group margin-top10">
+                        <label class="checkbox">
+                            <input type="checkbox" required> I agree to the <a href="#">terms and conditions</a>
+                        </label>
+                    </div>
                     <div class="field margin-top10">
-                        <p class="control">
+                        <p class="control" id="reg-btn">
                             <button class="button is-info">Register</button>
                         </p>
-                    </div>						 
+                    </div>				
                 </form>
             </div>
         </div>

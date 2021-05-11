@@ -65,6 +65,14 @@ body h1 {
     float: right;
 }
 
+.form-group label {
+	width: 100%;
+}
+
+.form-group .check-box {
+    padding-left: 10px;
+}
+
 .page-footer {
     background-color: deepskyblue;
     color: #000000;

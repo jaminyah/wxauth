@@ -50,8 +50,6 @@ blob: "",
 
 $(document).ready(function() {
     $("#captcha-solution").val("");
-    //$("#message").val("");
-
     generateCaptcha()
 });
 
@@ -134,10 +132,9 @@ function verifyCaptcha() {
         if (data.msg == "ok") {
             console.log("verify captcha success.")
             $("#captcha-solution").val("");
-           /* document.getElementById("captcha-form").reset();
-            $(".captcha-row").hide("slow", function(){
-                showMessage(data.msg);
-            });*/
+            $("#captcha-blk").hide("slow", function(){
+                console.log(data.msg);
+            });
         } else {
             console.log("verify captcha fail.")
             console.log(data.code);
