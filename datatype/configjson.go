@@ -1,4 +1,4 @@
-package models
+package datatype
 
 import (
 	"github.com/mojocn/base64Captcha"

@@ -3,14 +3,14 @@ package database
 import (
 	"log"
 	"testing"
-	"wxauth/models"
+	"wxauth/datatype"
 
 	"github.com/stretchr/testify/require"
 )
 
 func TestInsertUser(t *testing.T) {
 
-	arg := models.UserDataModel{
+	arg := datatype.UserDataModel{
 		Email:    "jan@mail.com",
 		Token:    "2468",
 		UserRole: "Client",
@@ -23,7 +23,7 @@ func TestInsertUser(t *testing.T) {
 
 func TestInsertUser2(t *testing.T) {
 
-	arg := models.UserDataModel{
+	arg := datatype.UserDataModel{
 		Email:    "der@mail.com",
 		Token:    "72019",
 		UserRole: "Client",
@@ -36,7 +36,7 @@ func TestInsertUser2(t *testing.T) {
 
 func TestGetUser(t *testing.T) {
 
-	arg := models.UserDataModel{
+	arg := datatype.UserDataModel{
 		Email:    "der@mail.com",
 		Token:    "72019",
 		UserRole: "Client",
@@ -106,7 +106,7 @@ func TestUpdateServices(t *testing.T) {
 
 func TestDeleteUser(t *testing.T) {
 
-	arg := models.UserDataModel{
+	arg := datatype.UserDataModel{
 		Email:    "der@mail.com",
 		Token:    "72019",
 		UserRole: "Client",

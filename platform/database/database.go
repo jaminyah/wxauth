@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"wxauth/models"
+	"wxauth/datatype"
 )
 
 type DbHandle struct {
@@ -35,7 +35,7 @@ func CreateTable(db *sql.DB) (*DbHandle, error) {
 	}, err
 }
 
-func (handle *DbHandle) InsertUser(user models.UserDataModel) error {
+func (handle *DbHandle) InsertUser(user datatype.UserDataModel) error {
 
 	sql, err := handle.DB.Prepare(`
 		INSERT INTO "users" (Email, Token, Role, Services) values (?, ?, ?, ?)
@@ -60,7 +60,7 @@ func (handle *DbHandle) InsertUser(user models.UserDataModel) error {
 	return err
 }
 
-func (handle *DbHandle) UpdateMail(user models.UserDataModel, newEmail string) error {
+func (handle *DbHandle) UpdateMail(user datatype.UserDataModel, newEmail string) error {
 
 	sql, err := handle.DB.Prepare(`
 		UPDATE users SET Email=? WHERE ID=?
@@ -85,7 +85,7 @@ func (handle *DbHandle) UpdateMail(user models.UserDataModel, newEmail string) e
 	return err
 }
 
-func (handle *DbHandle) UpdateToken(user models.UserDataModel, newToken string) error {
+func (handle *DbHandle) UpdateToken(user datatype.UserDataModel, newToken string) error {
 
 	sql, err := handle.DB.Prepare(`
 		UPDATE users SET Token=? WHERE ID=?
@@ -110,7 +110,7 @@ func (handle *DbHandle) UpdateToken(user models.UserDataModel, newToken string) 
 	return err
 }
 
-func (handle *DbHandle) UpdateServices(user models.UserDataModel, services string) error {
+func (handle *DbHandle) UpdateServices(user datatype.UserDataModel, services string) error {
 
 	sql, err := handle.DB.Prepare(`
 		UPDATE users SET Services=? WHERE ID=?
@@ -160,9 +160,9 @@ func (handle *DbHandle) DeleteUser(userEmail string) error {
 	return err
 }
 
-func (handle *DbHandle) GetUser(userEmail string) (models.UserDataModel, error) {
+func (handle *DbHandle) GetUser(userEmail string) (datatype.UserDataModel, error) {
 
-	user := models.UserDataModel{}
+	user := datatype.UserDataModel{}
 	rows, err := handle.DB.Query(`
 		SELECT * FROM users
 	`)
@@ -179,7 +179,7 @@ func (handle *DbHandle) GetUser(userEmail string) (models.UserDataModel, error) 
 	for rows.Next() {
 
 		rows.Scan(&id, &email, &token, &role, &services)
-		user = models.UserDataModel{
+		user = datatype.UserDataModel{
 			ID:       id,
 			Email:    email,
 			Token:    token,
@@ -195,9 +195,9 @@ func (handle *DbHandle) GetUser(userEmail string) (models.UserDataModel, error) 
 	return user, err
 }
 
-func (handle *DbHandle) ReadUsers() ([]models.UserDataModel, error) {
+func (handle *DbHandle) ReadUsers() ([]datatype.UserDataModel, error) {
 
-	userList := []models.UserDataModel{}
+	userList := []datatype.UserDataModel{}
 	rows, err := handle.DB.Query(`
 		SELECT * FROM users
 	`)
@@ -213,7 +213,7 @@ func (handle *DbHandle) ReadUsers() ([]models.UserDataModel, error) {
 
 	for rows.Next() {
 		rows.Scan(&id, &email, &token, &role, &services)
-		userDm := models.UserDataModel{
+		userDm := datatype.UserDataModel{
 			ID:       id,
 			Email:    email,
 			Token:    token,

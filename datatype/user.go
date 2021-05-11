@@ -1,4 +1,4 @@
-package models
+package datatype
 
 type User struct {
 	Email    string

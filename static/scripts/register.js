@@ -139,6 +139,7 @@ function verifyCaptcha() {
             console.log("verify captcha fail.")
             console.log(data.code);
             showMessage(data.msg);
+            $("#captcha-solution").val("");
             generateCaptcha();
         }
     })
@@ -150,11 +151,11 @@ function verifyCaptcha() {
 
 function showMessage(msgText) {
     console.log("Show message.")
-    let msg = msgText;
+    /*let msg = msgText;
     $(".alert").find('.message').text(msg);
     $(".alert").fadeIn("slow", function() {
         setTimeout(function(){
             $(".alert").fadeOut("slow");
         }, 2000);
-    });
+    });*/
 }

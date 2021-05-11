@@ -1,20 +1,20 @@
-package main
+package captcha
 
 import (
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"wxauth/models"
+	"wxauth/datatype"
 )
 
-func verifyCaptcha(w http.ResponseWriter, r *http.Request) {
+func VerifyCaptcha(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("VerifyCaptcha")
 
 	//parse request json body
 	decoder := json.NewDecoder(r.Body)
-	var param models.ConfigJsonBody
+	var param datatype.ConfigJsonBody
 
 	err := decoder.Decode(&param)
 	if err != nil {
@@ -24,7 +24,7 @@ func verifyCaptcha(w http.ResponseWriter, r *http.Request) {
 
 	//verify the captcha
 	body := map[string]interface{}{"code": 0, "msg": "failed"}
-	if store.Verify(param.Id, param.VerifyValue, true) {
+	if Store.Verify(param.Id, param.VerifyValue, true) {
 		body = map[string]interface{}{"code": 1, "msg": "ok"}
 	}
 

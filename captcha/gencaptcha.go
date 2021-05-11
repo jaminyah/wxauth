@@ -1,22 +1,22 @@
-package main
+package captcha
 
 import (
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"wxauth/models"
+	"wxauth/datatype"
 
 	"github.com/mojocn/base64Captcha"
 )
 
 // base64Captcha create http handler
-func genCaptcha(w http.ResponseWriter, r *http.Request) {
+func GenCaptcha(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("GenCaptcha")
 
 	decoder := json.NewDecoder(r.Body)
-	var param models.ConfigJsonBody
+	var param datatype.ConfigJsonBody
 
 	err := decoder.Decode(&param)
 	if err != nil {
@@ -39,7 +39,7 @@ func genCaptcha(w http.ResponseWriter, r *http.Request) {
 		driver = param.DriverDigit
 	}
 
-	c := base64Captcha.NewCaptcha(driver, store)
+	c := base64Captcha.NewCaptcha(driver, Store)
 	id, b64s, err := c.Generate()
 	body := map[string]interface{}{"code": 1, "data": b64s, "captchaId": id, "msg": "success"}
 	if err != nil {

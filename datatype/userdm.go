@@ -1,4 +1,4 @@
-package models
+package datatype
 
 type UserDataModel struct {
 	ID       int
