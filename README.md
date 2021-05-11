@@ -18,3 +18,9 @@
 
 
 3. Develop GitHub Action deployment pipeline.
+
+---
+
+external references:
+  - '[How to use local Go modules](https://brokencode.io/how-to-use-local-go-modules-with-golang-with-examples/)'
+---
