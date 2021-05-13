@@ -7,12 +7,11 @@ import (
 	"net/http"
 	"os"
 	"wxauth/captcha"
+	"wxauth/handlers"
 	"wxauth/platform/database"
 
 	_ "github.com/mattn/go-sqlite3"
 )
-
-//var store = base64Captcha.DefaultMemStore
 
 func main() {
 
@@ -34,13 +33,9 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
-	//api for create captcha
 	http.HandleFunc("/api/getcaptcha", captcha.GenCaptcha)
-
-	//api for verify captcha
 	http.HandleFunc("/api/verifycaptcha", captcha.VerifyCaptcha)
-
-	//http.HandleFunc("/api/register", registerUser)
+	http.HandleFunc("/api/register", handlers.RegisterUser)
 
 	fmt.Println("Server is at :8090")
 	if err := http.ListenAndServe(":8090", nil); err != nil {

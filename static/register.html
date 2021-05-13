@@ -25,27 +25,38 @@
                     <div class="field">
                         <label for="email">E-Mail Address</label>
                         <p class="control has-icons-left has-icons-right">
-                            <input class="input" type="email" placeholder="Email">
+                            <input class="input input-email" type="email" id="input-email" placeholder="username@address" 
+                            autocomplete="off" required>
                             <span class="icon is-small is-left">
                                 <i class="fas fa-envelope"></i>
                             </span>
+                            <span class="icon is-small is-right">
+                                <i id='emailValidIcon' class="fas fa-exclamation-triangle"></i>
+                            </span>
                         </p>
+                        <p class="help" id="emailError"></p>                       
                     </div>
                     <div class="field">
                         <label for="password">Password</label>
-                        <p class="control has-icons-left">
-                        <input class="input" type="password" placeholder="Password">
+                        <p class="control has-icons-left has-icons-right" >
+                        <input class="input input-passwd" type="password" id="field-passwd" placeholder="Password" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-lock"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                            <i id='passwdValidIcon' class="fas fa-exclamation-triangle"></i>
                         </span>
                         </p>
                     </div>
                     <div class="field">
                         <label for="password">Confirm Password</label>
-                        <p class="control has-icons-left">
-                        <input class="input" type="password" placeholder="Password">
+                        <p class="control has-icons-left has-icons-right">
+                        <input class="input input-confirm" type="password" id="field-confirm" placeholder="Password" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-lock"></i>
+                        </span>
+                        <span class="icon is-small is-right">
+                            <i id='confirmValidIcon' class="fas fa-exclamation-triangle"></i>
                         </span>
                         </p>
                     </div>
@@ -61,21 +72,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group margin-top10">
+                    <div class="field margin-top10">
                         <label class="checkbox">
                             <input type="checkbox" required> I agree to the <a href="#">terms and conditions</a>
                         </label>
                     </div>
                     <div class="field margin-top10">
-                        <p class="control" id="reg-btn">
-                            <button class="button is-info">Register</button>
+                        <p class="control">
+                            <button class="button is-info" id="reg-btn" disabled="true" >Register</button>
                         </p>
                     </div>				
                 </form>
             </div>
         </div>
     </div>
-    <script src="scripts/register.js"></script>
+    <script src="scripts/register.js" async defer></script>
     <div class="page-footer">
         <p>&copy; <span id="timestamp"></span>&nbsp;WxAlert</p>
         <script>

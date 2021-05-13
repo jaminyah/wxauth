@@ -1,3 +1,7 @@
+/*
+* Email validation reference:
+* https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+*/
 
 var captchaForm = {
     ShowLineOptions: [],
@@ -50,6 +54,7 @@ blob: "",
 
 $(document).ready(function() {
     $("#captcha-solution").val("");
+    $("#field-email").val(" ");
     generateCaptcha()
 });
 
@@ -87,6 +92,7 @@ function generateCaptcha() {
     });
 }
 
+/*
 $('#comment-form').submit(function(e) {
 
     e.preventDefault();         // avoid executing the actual submit form
@@ -109,6 +115,7 @@ $('#comment-form').submit(function(e) {
         }
     });
 });
+*/
 
 function verifyCaptcha() {
     console.log("verifyCaptcha");
@@ -158,4 +165,84 @@ function showMessage(msgText) {
             $(".alert").fadeOut("slow");
         }, 2000);
     });*/
+}
+
+function registerUser() {
+    console.log('Register submit');
+    const url = '/api/register';
+    
+    var address = document.getElementById("field-email").value;
+    var password = document.getElementById("field-passwd").value;
+    var confirm = document.getElementById("field-confirm").value;
+
+    
+    var registerForm = {
+        emailAddr: address,
+        password: password,
+        confirm: confirm
+    }
+
+    let fetchData = {
+        method: 'post',
+        body: JSON.stringify(registerForm),
+        headers: new Headers()
+    }
+
+    fetch(url, fetchData)
+    .then(function(response) {
+        console.log("fetch register response.");
+        return response.json();
+    })
+    .then(function(data) {
+       /* console.log(data.captchaId);
+        captchaForm.Id = data.captchaId;
+        blob = data.data;
+        displayCaptcha(data);
+      */
+    })
+    .catch(function(error) {
+        console.log("fetch error: ")
+        console.log(error);
+    });
+}
+
+
+/******************************************************** EMAIL VALIDATION *******/
+
+let email = document.getElementById("input-email");
+let emailError = document.getElementById("emailError");
+emailError.style.display = "none";
+
+email.addEventListener("keyup", event => {
+
+    console.log('verify email')
+
+    let text = email.value
+    emailCheck(text, emailError);
+});
+
+function emailCheck(text, emailError) {
+
+    //let condition = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let condition = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i
+
+    emailError.style.color = "red";
+    const inputEmail = document.getElementById('input-email');
+    const iconEmail = document.getElementById('emailValidIcon')
+
+    if (!text.match(condition)) {
+        inputEmail.classList.remove('is-success')
+        inputEmail.classList.add('is-danger')
+        iconEmail.classList.remove('fa-check')
+        iconEmail.classList.add('fa-exclamation-triangle')
+        emailError.style.display = "block";
+        emailError.innerText = "Invalid Email Address";
+    } else {
+            inputEmail.classList.remove('is-danger')
+            inputEmail.classList.add('is-success')
+            iconEmail.classList.remove('fa-exclamation-triangle')
+            iconEmail.classList.add('fa-check')
+            emailError.style.display = "none";
+    }
+    return;
 }
