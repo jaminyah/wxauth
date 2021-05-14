@@ -51,10 +51,14 @@ var captchaForm = {
 blob: "",
 }
 
+let emailValidated = 'false';
+let passwdConfirmed = 'false';
+let captchaConfirmed = 'false';
 
 $(document).ready(function() {
     $("#captcha-solution").val("");
     $("#field-email").val(" ");
+    $("#reg-btn").prop("disabled", true);
     getCaptcha()
     $("#input-passwd, #input-confirm").keyup(checkPasswordMatch);
 });
@@ -141,16 +145,20 @@ function verifyCaptcha() {
         console.log("verify server response: ", data.msg);
         if (data.msg == "ok") {
             console.log("verify captcha success.")
+
+            captchaConfirmed = 'true';
             $("#captcha-solution").val("");
             $("#captcha-blk").hide("slow", function(){
                 console.log(data.msg);
             });
+            checkSubmit();
         } else {
             console.log("verify captcha fail.")
             console.log(data.code);
             showMessage(data.msg);
             $("#captcha-solution").val("");
-            generateCaptcha();
+            captchaConfirmed = 'false';
+            getCaptcha();
         }
     })
     .catch(function(error){
@@ -174,12 +182,11 @@ function showMessage(msgText) {
 function registerUser() {
     console.log('Register submit');
     const url = '/api/register';
-    
+    /*
     var address = document.getElementById("field-email").value;
     var password = document.getElementById("field-passwd").value;
     var confirm = document.getElementById("field-confirm").value;
 
-    
     var registerForm = {
         emailAddr: address,
         password: password,
@@ -198,16 +205,17 @@ function registerUser() {
         return response.json();
     })
     .then(function(data) {
-       /* console.log(data.captchaId);
+        console.log(data.captchaId);
         captchaForm.Id = data.captchaId;
         blob = data.data;
         displayCaptcha(data);
-      */
+      
     })
     .catch(function(error) {
         console.log("fetch error: ")
         console.log(error);
     });
+    */
 }
 
 /******************************************************** EMAIL VALIDATION *******/
@@ -247,6 +255,8 @@ function emailCheck(text, emailError) {
             iconEmail.classList.remove('fa-exclamation-triangle')
             iconEmail.classList.add('fa-check')
             emailError.style.display = "none";
+            emailValidated = 'true';
+            checkSubmit();
     }
     return;
 }
@@ -329,6 +339,8 @@ function checkPasswordMatch() {
     } else {
         $("#confirmError").html("Passwords match success.");
         showConfirmSucessStyle();
+        passwdConfirmed = 'true'; 
+        checkSubmit();       
     }
 } 
 
@@ -344,4 +356,17 @@ function showConfirmSucessStyle() {
     confirmInput.classList.add('is-success');
     confirmValidIcon.classList.remove('fa-exclamation-triangle');
     confirmValidIcon.classList.add('fa-check');
+}
+
+function checkSubmit() {
+    console.log('check submit');
+
+    console.log(emailValidated);
+    console.log(passwdConfirmed);
+    console.log(captchaConfirmed);
+
+    if ( emailValidated && passwdConfirmed && captchaConfirmed) {
+        $("#reg-btn").prop("disabled", false);
+       // $("#reg-btn").attr("disabled", false);
+    }
 }
