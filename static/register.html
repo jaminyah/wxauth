@@ -39,7 +39,7 @@
                     <div class="field">
                         <label for="password">Password</label>
                         <p class="control has-icons-left has-icons-right" >
-                        <input class="input input-passwd" type="password" id="field-passwd" placeholder="Password" required>
+                        <input class="input input-passwd" type="password" id="input-passwd" placeholder="Password" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-lock"></i>
                         </span>
@@ -47,11 +47,12 @@
                             <i id='passwdValidIcon' class="fas fa-exclamation-triangle"></i>
                         </span>
                         </p>
+                        <p id="passwdError"></p>
                     </div>
                     <div class="field">
                         <label for="password">Confirm Password</label>
                         <p class="control has-icons-left has-icons-right">
-                        <input class="input input-confirm" type="password" id="field-confirm" placeholder="Password" required>
+                        <input class="input input-confirm" type="password" id="input-confirm" placeholder="Confirm password" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-lock"></i>
                         </span>
@@ -59,6 +60,7 @@
                             <i id='confirmValidIcon' class="fas fa-exclamation-triangle"></i>
                         </span>
                         </p>
+                        <p id="confirmError"></p>
                     </div>
                     <div id="captcha-blk">
                         <div class="captcha margin-top20" id="captcha-img"></div>
@@ -68,7 +70,7 @@
                               required />
                             </div>
                             <div class="control">
-                              <a class="button is-success" onclick="verifyCaptcha()">Verify</a>
+                              <a class="button is-success" id="verifyCaptcha" onclick="verifyCaptcha()">Verify</a>
                             </div>
                         </div>
                     </div>
@@ -86,7 +88,7 @@
             </div>
         </div>
     </div>
-    <script src="scripts/register.js" async defer></script>
+    <script type="text/javascript" src="scripts/register.js" async defer></script>
     <div class="page-footer">
         <p>&copy; <span id="timestamp"></span>&nbsp;WxAlert</p>
         <script>

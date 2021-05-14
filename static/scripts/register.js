@@ -55,7 +55,8 @@ blob: "",
 $(document).ready(function() {
     $("#captcha-solution").val("");
     $("#field-email").val(" ");
-    generateCaptcha()
+    getCaptcha()
+    $("#input-passwd, #input-confirm").keyup(checkPasswordMatch);
 });
 
 
@@ -64,7 +65,8 @@ function displayCaptcha(captcha) {
     $("#captcha-img").html(captchaImage);
 }
 
-function generateCaptcha() {
+
+function getCaptcha() {
     console.log('Generating captcha');
     const url = '/api/getcaptcha';
     var blob = "";
@@ -117,6 +119,7 @@ $('#comment-form').submit(function(e) {
 });
 */
 
+
 function verifyCaptcha() {
     console.log("verifyCaptcha");
     captchaForm.VerifyValue = document.getElementById("captcha-solution").value;
@@ -155,6 +158,7 @@ function verifyCaptcha() {
         console.log(error);
     });
 }
+
 
 function showMessage(msgText) {
     console.log("Show message.")
@@ -206,7 +210,6 @@ function registerUser() {
     });
 }
 
-
 /******************************************************** EMAIL VALIDATION *******/
 
 let email = document.getElementById("input-email");
@@ -220,6 +223,7 @@ email.addEventListener("keyup", event => {
     let text = email.value
     emailCheck(text, emailError);
 });
+
 
 function emailCheck(text, emailError) {
 
@@ -245,4 +249,99 @@ function emailCheck(text, emailError) {
             emailError.style.display = "none";
     }
     return;
+}
+
+/******************************************************** PASSWORD VALIDATION *******/
+
+let passInput = document.getElementById("input-passwd");
+let passwordError = document.getElementById("passwdError");
+
+passwordError.style.display = "none";
+passInput.addEventListener('keyup', event => {
+    let text = passInput.value;
+    passwdCheck(text, passwordError);
+});
+
+function passwdCheck(text, passwordError) {
+    let condition1 = /(?=.*\d)/; //should contain atleast 1 digit
+    let condition2 = /(?=.*[a-z])/; //should contain atleast 1 lowercase
+    let condition3 = /(?=.*[A-Z])/; //should contain atleast 1 uppercase
+    let condition4 = /[a-zA-Z0-9]{8,}/; //should contain atleast 8 characters
+
+    passwdError.style.color = "red";
+
+    if (!text.match(condition1)) {
+        passwdError.style.display = "block";
+        passwdError.innerText = "Password should contain atleast 1 digit";
+        showPassErrorStyle();
+    } else
+
+    if (!text.match(condition2)) {
+        passwdError.style.display = "block";
+        passwdError.innerText = "Password should contain atleast 1 lowercase";
+        showPassErrorStyle();
+    } else
+
+    if (!text.match(condition3)) {
+        passwdError.style.display = "block";
+        passwdError.innerText = "Password should contain atleast 1 uppercase";
+        showPassErrorStyle();
+    } else
+
+    if (!text.match(condition4)) {
+        passwdError.style.display = "block";
+        passwdError.innerText = "Password should contain atleast 8 characters";
+        showPassErrorStyle();
+    } else {
+        passwdError.style.display = "none";
+        showPassSucessStyle();
+    }
+    return;
+}
+
+function showPassErrorStyle() {
+    passInput.classList.remove('is-success');
+    passInput.classList.add('is-danger');
+    passwdValidIcon.classList.remove('fa-check');
+    passwdValidIcon.classList.add('fa-exclamation-triangle');
+}
+
+function showPassSucessStyle() {
+    passInput.classList.remove('is-danger');
+    passInput.classList.add('is-success');
+    passwdValidIcon.classList.remove('fa-exclamation-triangle');
+    passwdValidIcon.classList.add('fa-check');
+}
+
+/******************************************************** PASSWORD CONFIRMATION *****/
+
+let confirmInput = document.getElementById("input-confirm");
+let confirmError = document.getElementById("confirmError");
+
+function checkPasswordMatch() {
+
+    let inputPass = $("#input-passwd").val();
+    let inputConfirm = $("#input-confirm").val();
+
+    if (inputPass !== inputConfirm) {
+        $("#confirmError").html("Passwords match fail.");
+        showConfirmErrorStyle();
+    } else {
+        $("#confirmError").html("Passwords match success.");
+        showConfirmSucessStyle();
+    }
+} 
+
+function showConfirmErrorStyle() {
+    confirmInput.classList.remove('is-success');
+    confirmInput.classList.add('is-danger');
+    confirmValidIcon.classList.remove('fa-check');
+    confirmValidIcon.classList.add('fa-exclamation-triangle');
+}
+
+function showConfirmSucessStyle() {
+    confirmInput.classList.remove('is-danger');
+    confirmInput.classList.add('is-success');
+    confirmValidIcon.classList.remove('fa-exclamation-triangle');
+    confirmValidIcon.classList.add('fa-check');
 }
