@@ -369,3 +369,11 @@ passwdVisible.addEventListener('click', function(e) {
     passInput.setAttribute('type', passtype);
     confirmInput.setAttribute('type', confirmtype);
 });
+
+function checkSubmit() {
+    console.log('check submit');
+
+    if ( emailValidated && passwdConfirmed && captchaConfirmed) {
+        $("#reg-btn").prop("disableed", false);
+    }
+}
