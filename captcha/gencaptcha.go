@@ -10,6 +10,8 @@ import (
 	"github.com/mojocn/base64Captcha"
 )
 
+//var store = base64Captcha.DefaultMemStore
+
 // base64Captcha create http handler
 func GenCaptcha(w http.ResponseWriter, r *http.Request) {
 
