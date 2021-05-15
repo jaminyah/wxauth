@@ -182,26 +182,27 @@ function showMessage(msgText) {
 function registerUser() {
     console.log('Register submit');
     const url = '/api/register';
-    /*
+
     var address = document.getElementById("field-email").value;
     var password = document.getElementById("field-passwd").value;
-    var confirm = document.getElementById("field-confirm").value;
 
     var registerForm = {
         emailAddr: address,
-        password: password,
-        confirm: confirm
+        password: password
     }
 
-    let fetchData = {
+    let registerData = {
         method: 'post',
         body: JSON.stringify(registerForm),
         headers: new Headers()
     }
 
-    fetch(url, fetchData)
+    // http response code = 200 success, client redirect to activation.html
+    // http response code = 400 fail, client remains on register page
+    /*
+    fetch(url, registerData)
     .then(function(response) {
-        console.log("fetch register response.");
+        console.log("registerData response.");
         return response.json();
     })
     .then(function(data) {
@@ -367,6 +368,5 @@ function checkSubmit() {
 
     if ( emailValidated && passwdConfirmed && captchaConfirmed) {
         $("#reg-btn").prop("disabled", false);
-       // $("#reg-btn").attr("disabled", false);
     }
 }
