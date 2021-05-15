@@ -57,10 +57,17 @@ let captchaConfirmed = 'false';
 
 $(document).ready(function() {
     $("#captcha-solution").val("");
+<<<<<<< HEAD
     $("#field-email").val(" ");
     $("#reg-btn").prop("disabled", true);
     getCaptcha()
+=======
+    $("#field-email").val("");
+    $('input[type=checkbox]').prop('checked',false);
+    $("#reg-btn").prop("disabled", true);
+>>>>>>> br_refac
     $("#input-passwd, #input-confirm").keyup(checkPasswordMatch);
+    getCaptcha();
 });
 
 
@@ -157,7 +164,10 @@ function verifyCaptcha() {
             console.log(data.code);
             showMessage(data.msg);
             $("#captcha-solution").val("");
+<<<<<<< HEAD
             captchaConfirmed = 'false';
+=======
+>>>>>>> br_refac
             getCaptcha();
         }
     })
@@ -264,8 +274,8 @@ function emailCheck(text, emailError) {
 
 /******************************************************** PASSWORD VALIDATION *******/
 
-let passInput = document.getElementById("input-passwd");
-let passwordError = document.getElementById("passwdError");
+const passInput = document.getElementById("input-passwd");
+const passwordError = document.getElementById("passwdError");
 
 passwordError.style.display = "none";
 passInput.addEventListener('keyup', event => {
@@ -340,8 +350,12 @@ function checkPasswordMatch() {
     } else {
         $("#confirmError").html("Passwords match success.");
         showConfirmSucessStyle();
+<<<<<<< HEAD
         passwdConfirmed = 'true'; 
         checkSubmit();       
+=======
+        $("#reg-btn").prop("disabled", false);
+>>>>>>> br_refac
     }
 } 
 
@@ -359,6 +373,7 @@ function showConfirmSucessStyle() {
     confirmValidIcon.classList.add('fa-check');
 }
 
+<<<<<<< HEAD
 function checkSubmit() {
     console.log('check submit');
 
@@ -370,3 +385,15 @@ function checkSubmit() {
         $("#reg-btn").prop("disabled", false);
     }
 }
+=======
+/******************************************************** TOGGLE PASSWORD *****/
+
+const passwdVisible = document.querySelector('.passwd-chkbox');
+
+passwdVisible.addEventListener('click', function(e) {
+    const passtype = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    const confirmtype = confirmInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passInput.setAttribute('type', passtype);
+    confirmInput.setAttribute('type', confirmtype);
+});
+>>>>>>> br_refac
