@@ -38,12 +38,15 @@
                     </div>
                     <div class="field">
                         <label for="password">Password</label>
+                        <label class="checkbox passwd-chkbox">
+                            <input type="checkbox"> Show
+                        </label>
                         <p class="control has-icons-left has-icons-right" >
                         <input class="input input-passwd" type="password" id="input-passwd" placeholder="Password" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-lock"></i>
                         </span>
-                        <span class="icon is-small is-right">
+                        <span class="icon pass-icon is-small is-right">
                             <i id='passwdValidIcon' class="fas fa-exclamation-triangle"></i>
                         </span>
                         </p>
@@ -81,7 +84,7 @@
                     </div>
                     <div class="field margin-top10">
                         <p class="control">
-                            <button class="button is-info" id="reg-btn" disabled="true" >Register</button>
+                            <button class="button is-info" id="reg-btn" onclick="registerUser()">Register</button>
                         </p>
                     </div>				
                 </form>

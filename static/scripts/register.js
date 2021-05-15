@@ -54,9 +54,11 @@ blob: "",
 
 $(document).ready(function() {
     $("#captcha-solution").val("");
-    $("#field-email").val(" ");
-    getCaptcha()
+    $("#field-email").val("");
+    $('input[type=checkbox]').prop('checked',false);
+    $("#reg-btn").prop("disabled", true);
     $("#input-passwd, #input-confirm").keyup(checkPasswordMatch);
+    getCaptcha();
 });
 
 
@@ -150,7 +152,7 @@ function verifyCaptcha() {
             console.log(data.code);
             showMessage(data.msg);
             $("#captcha-solution").val("");
-            generateCaptcha();
+            getCaptcha();
         }
     })
     .catch(function(error){
@@ -253,8 +255,8 @@ function emailCheck(text, emailError) {
 
 /******************************************************** PASSWORD VALIDATION *******/
 
-let passInput = document.getElementById("input-passwd");
-let passwordError = document.getElementById("passwdError");
+const passInput = document.getElementById("input-passwd");
+const passwordError = document.getElementById("passwdError");
 
 passwordError.style.display = "none";
 passInput.addEventListener('keyup', event => {
@@ -329,6 +331,7 @@ function checkPasswordMatch() {
     } else {
         $("#confirmError").html("Passwords match success.");
         showConfirmSucessStyle();
+        $("#reg-btn").prop("disabled", false);
     }
 } 
 
@@ -345,3 +348,14 @@ function showConfirmSucessStyle() {
     confirmValidIcon.classList.remove('fa-exclamation-triangle');
     confirmValidIcon.classList.add('fa-check');
 }
+
+/******************************************************** TOGGLE PASSWORD *****/
+
+const passwdVisible = document.querySelector('.passwd-chkbox');
+
+passwdVisible.addEventListener('click', function(e) {
+    const passtype = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    const confirmtype = confirmInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passInput.setAttribute('type', passtype);
+    confirmInput.setAttribute('type', confirmtype);
+});
