@@ -15,5 +15,6 @@ replace (
 	wxauth/captcha => ./captcha
 	wxauth/datatype => ./datatype
 	wxauth/handlers => ./handlers
+	wxauth/mail => ./mail
 	wxauth/platform/database => ./platform/database
 )
