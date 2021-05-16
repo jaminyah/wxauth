@@ -180,45 +180,7 @@ function showMessage(msgText) {
     });*/
 }
 
-function registerUser() {
-    console.log('Register submit');
-    const url = '/api/register';
 
-    var address = document.getElementById("field-email").value;
-    var password = document.getElementById("field-passwd").value;
-
-    var registerForm = {
-        emailAddr: address,
-        password: password
-    }
-
-    let registerData = {
-        method: 'post',
-        body: JSON.stringify(registerForm),
-        headers: new Headers()
-    }
-
-    // http response code = 200 success, client redirect to activation.html
-    // http response code = 400 fail, client remains on register page
-    /*
-    fetch(url, registerData)
-    .then(function(response) {
-        console.log("registerData response.");
-        return response.json();
-    })
-    .then(function(data) {
-        console.log(data.captchaId);
-        captchaForm.Id = data.captchaId;
-        blob = data.data;
-        displayCaptcha(data);
-      
-    })
-    .catch(function(error) {
-        console.log("fetch error: ")
-        console.log(error);
-    });
-    */
-}
 
 /******************************************************** EMAIL VALIDATION *******/
 
@@ -376,4 +338,52 @@ function checkSubmit() {
     if ( emailValidated && passwdConfirmed && captchaConfirmed) {
         $("#reg-btn").prop("disableed", false);
     }
+}
+
+/******************************************************** REGISTER USER *****/
+
+function registerUser() {
+    console.log('Register submit');
+    const url = '/api/register';
+
+    var addr = document.getElementById("input-email").value;
+    var passwd = document.getElementById("input-passwd").value;
+
+    var registerForm = {
+        email: addr,
+        password: passwd
+    }
+
+    let registerData = {
+        method: 'post',
+        body: JSON.stringify(registerForm),
+        headers: new Headers()
+    }
+
+    // http response code = 200 success, client redirect to activation.html
+    // http response code = 400 fail, client remains on register page
+    
+    fetch(url, registerData)
+    .then(function(response) {
+        console.log("registerData response.");
+        return response.json();
+    })
+    .then(function(data) {
+        console.log(data.code);
+        console.log(data.msg);
+        console.log(data.email);
+        /*
+        captchaForm.Id = data.captchaId;
+        blob = data.data;
+        displayCaptcha(data);
+        */
+       if (data.code === 200) {
+           window.location.href = "http://localhost:8090/activate.html"
+       }
+    })
+    .catch(function(error) {
+        console.log("fetch error: ")
+        console.log(error);
+    });
+
 }
