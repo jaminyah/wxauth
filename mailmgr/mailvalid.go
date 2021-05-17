@@ -1,3 +1,5 @@
+// Ref: https://golangcode.com/validate-an-email-address/
+
 package mailmgr
 
 import (
