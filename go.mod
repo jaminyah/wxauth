@@ -13,8 +13,10 @@ require (
 
 replace (
 	wxauth/captcha => ./captcha
+	wxauth/codegen => ./codegen
 	wxauth/datatype => ./datatype
 	wxauth/handlers => ./handlers
 	wxauth/mail => ./mail
+	wxauth/mailmgr => ./mailmgr
 	wxauth/platform/database => ./platform/database
 )

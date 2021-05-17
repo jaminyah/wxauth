@@ -9,7 +9,7 @@ import (
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
-func Send(emailAddr string, authCode string) {
+func Send(emailAddr string, authCode string) int {
 
 	from := mail.NewEmail("WxAlert", "noreply@wxalert.us")
 	subject := "Activation Code"
@@ -27,4 +27,6 @@ func Send(emailAddr string, authCode string) {
 		fmt.Println(response.Body)
 		fmt.Println(response.Headers)
 	}
+
+	return response.StatusCode
 }
