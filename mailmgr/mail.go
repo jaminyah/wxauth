@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
@@ -11,9 +12,11 @@ import (
 
 func Send(emailAddr string, authCode string) int {
 
-	from := mail.NewEmail("WxAlert", "noreply@wxalert.us")
+	components := strings.Split(emailAddr, "@")
+
+	from := mail.NewEmail("WxAlert Sign-up", "noreply@wxalert.us")
 	subject := "Activation Code"
-	to := mail.NewEmail("Example User", emailAddr)
+	to := mail.NewEmail(components[0], emailAddr)
 	plainTextContent := "Your activation code is: " + authCode
 	htmlContent := "<strong>Use the code to activate your WxAlert account: </strong>" + authCode
 	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)

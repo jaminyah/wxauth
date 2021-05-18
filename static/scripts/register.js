@@ -372,12 +372,8 @@ function registerUser() {
         console.log(data.code);
         console.log(data.msg);
         console.log(data.email);
-        /*
-        captchaForm.Id = data.captchaId;
-        blob = data.data;
-        displayCaptcha(data);
-        */
-       if (data.code === 200) {
+
+       if (data.code === 202) {
            window.location.href = "http://localhost:8090/activate.html"
        }
     })
