@@ -36,6 +36,7 @@ func main() {
 	http.HandleFunc("/api/getcaptcha", captcha.GenCaptcha)
 	http.HandleFunc("/api/verifycaptcha", captcha.VerifyCaptcha)
 	http.HandleFunc("/api/register", handlers.RegisterUser)
+	http.HandleFunc("/api/activate", handlers.ActivateUser)
 
 	fmt.Println("Server is at :8090")
 	if err := http.ListenAndServe(":8090", nil); err != nil {

@@ -8,7 +8,9 @@ import (
 	"regexp"
 	"wxauth/codegen"
 	"wxauth/datatype"
-	"wxauth/mailmgr"
+
+	//"wxauth/mailmgr"
+	"wxauth/redismgr"
 )
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
@@ -29,14 +31,17 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	userPass := form.Password
 	numDigits := 6
 
-	actcode, err := codegen.GenActCode(numDigits)
+	actCode, err := codegen.GenActCode(numDigits)
 	if err != nil {
 		log.Println(err)
 	}
+	fmt.Printf("actcode: %v\n", actCode)
 
-	response := mailmgr.Send(mailAddr, actcode)
-	fmt.Printf("Mail response: %v", response)
+	// DEBUG - TEMPORARY SEND NO MAIL
+	//response := mailmgr.Send(mailAddr, actcode)
+	//fmt.Printf("Mail response: %v", response)
 
+	response := 202 // DEV TESTING
 	body := map[string]interface{}{"code": response, "msg": "failed", "email": form.Email}
 
 	if response == 202 && isPasswdValid(userPass) {
@@ -47,7 +52,8 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json.NewEncoder(w).Encode(body)
 
-	/* User credentials to database */
+	// Store email + activation code
+	redismgr.StoreEmailCode(mailAddr, actCode)
 
 }
 
