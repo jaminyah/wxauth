@@ -14,6 +14,7 @@ require (
 	wxauth/mailmgr v0.0.0 // indirect
 	wxauth/platform/database v0.0.0
 	wxauth/redismgr v0.0.0
+	wxauth/encryptmgr v0.0.0
 )
 
 replace (
@@ -25,4 +26,5 @@ replace (
 	wxauth/mailmgr => ./mailmgr
 	wxauth/platform/database => ./platform/database
 	wxauth/redismgr => ./redismgr
+	wxauth/encryptmgr => ./encryptmgr
 )

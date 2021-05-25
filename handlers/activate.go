@@ -32,7 +32,6 @@ func ActivateUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Auth code validated: %v\n", isValidCode)
 
 	body := map[string]interface{}{"code": 400, "msg": "failed", "email": form.Email}
-
 	if isValidCode {
 		body = map[string]interface{}{"code": 200, "msg": "ok", "email": form.Email}
 	}
@@ -40,5 +39,10 @@ func ActivateUser(w http.ResponseWriter, r *http.Request) {
 	//set json response
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json.NewEncoder(w).Encode(body)
+
+	// Save password in db
+	if isValidCode {
+		// read redis store for password
+	}
 
 }

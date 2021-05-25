@@ -55,6 +55,10 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	// Store email + activation code
 	redismgr.StoreEmailCode(mailAddr, actCode)
 
+	// encode password
+
+	// Store email + encoded password
+
 }
 
 func isPasswdValid(passwd string) bool {

@@ -19,6 +19,7 @@ func StoreEmailPass(addr, passwd string) {
 		DB:       0,
 	})
 
+	addr = addr + "-pwd" // key = "email-pwd"
 	_, err := client.Set(ctx, addr, passwd, 2*time.Hour).Result()
 	if err != nil {
 		panic(err)
@@ -35,7 +36,6 @@ func FetchPass(addr string) string {
 	})
 
 	addr = addr + "-pwd"
-
 	val, err := client.Get(ctx, addr).Result()
 	if err != nil {
 		fmt.Println("redis get error: ", err)
@@ -54,6 +54,7 @@ func StoreEmailCode(addr, code string) {
 		DB:       0,
 	})
 
+	addr = addr + "-cd" // key = "email-cd"
 	_, err := client.Set(ctx, addr, code, 30*time.Minute).Result()
 	if err != nil {
 		panic(err)
@@ -69,6 +70,7 @@ func ValidateCode(addr, userCode string) bool {
 		DB:       0,
 	})
 
+	addr = addr + "-cd"
 	cachedCode, err := client.Get(ctx, addr).Result()
 	if err != nil {
 		fmt.Println("redis get error: ", err)
