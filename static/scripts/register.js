@@ -3,6 +3,8 @@
 * https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
 */
 
+import { getPublicKey, publicKeyEncrypt } from './modules/rsakeys.js';
+
 var captchaForm = {
     ShowLineOptions: [],
     CaptchaType: "string",
@@ -62,6 +64,7 @@ $(document).ready(function() {
     $("#reg-btn").prop("disabled", true);
     $("#input-passwd, #input-confirm").keyup(checkPasswordMatch);
     getCaptcha();
+    getPublicKey();
 });
 
 
@@ -99,31 +102,6 @@ function getCaptcha() {
     });
 }
 
-/*
-$('#comment-form').submit(function(e) {
-
-    e.preventDefault();         // avoid executing the actual submit form
-
-    var form = $(this);
-    $.ajax({
-        type: form.attr('method'),
-        url: "/submit",
-        contentType: 'application/x-www-form-urlencoded',
-        data: form.serialize(),
-        success: function(data) {
-            $("#username").val("");
-            $("#message").val("");
-            $("#captcha-solution").val("");
-            $(".captcha-row").show(2000);
-        },
-        error: function(data) {
-            console.log('There is an error');
-            console.log(data);
-        }
-    });
-});
-*/
-
 
 function verifyCaptcha() {
     console.log("verifyCaptcha");
@@ -156,7 +134,6 @@ function verifyCaptcha() {
         } else {
             console.log("verify captcha fail.")
             console.log(data.code);
-            showMessage(data.msg);
             $("#captcha-solution").val("");
             captchaConfirmed = 'false';
             getCaptcha();
@@ -167,20 +144,6 @@ function verifyCaptcha() {
         console.log(error);
     });
 }
-
-
-function showMessage(msgText) {
-    console.log("Show message.")
-    /*let msg = msgText;
-    $(".alert").find('.message').text(msg);
-    $(".alert").fadeIn("slow", function() {
-        setTimeout(function(){
-            $(".alert").fadeOut("slow");
-        }, 2000);
-    });*/
-}
-
-
 
 /******************************************************** EMAIL VALIDATION *******/
 
@@ -348,10 +311,11 @@ function registerUser() {
 
     var addr = document.getElementById("input-email").value;
     var passwd = document.getElementById("input-passwd").value;
+    let passEncrypted = publicKeyEncrypt(passwd)
 
     var registerForm = {
         email: addr,
-        password: passwd
+        password: passEncrypted
     }
 
     let registerData = {

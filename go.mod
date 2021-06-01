@@ -15,6 +15,7 @@ require (
 	wxauth/platform/database v0.0.0
 	wxauth/redismgr v0.0.0
 	wxauth/encryptmgr v0.0.0
+	wxauth/e2ee v0.0.0
 )
 
 replace (
@@ -27,4 +28,5 @@ replace (
 	wxauth/platform/database => ./platform/database
 	wxauth/redismgr => ./redismgr
 	wxauth/encryptmgr => ./encryptmgr
+	wxauth/e2ee => ./e2ee
 )

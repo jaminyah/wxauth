@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"wxauth/captcha"
+	"wxauth/e2ee"
 	"wxauth/handlers"
 	"wxauth/platform/database"
 
@@ -37,6 +38,7 @@ func main() {
 	http.HandleFunc("/api/verifycaptcha", captcha.VerifyCaptcha)
 	http.HandleFunc("/api/register", handlers.RegisterUser)
 	http.HandleFunc("/api/activate", handlers.ActivateUser)
+	http.HandleFunc("/api/public", e2ee.SendPublicKey)
 
 	fmt.Println("Server is at :8090")
 	if err := http.ListenAndServe(":8090", nil); err != nil {
