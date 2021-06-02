@@ -1,8 +1,7 @@
-let activateForm = {
-    email: "",
-    code: ""
+var activateForm = {
+    Email: "",
+    Code: ""
 }
-
 
 $(document).ready(function() {
     $("#input-email").val("");
@@ -13,12 +12,12 @@ function activateUser() {
     console.log('Activate submit');
 
     const url = '/api/activate';
-    activateForm.email = document.getElementById("input-email").value;
-    activateForm.code = document.getElementById("input-code").value;
+    activateForm.Email = document.getElementById("input-email").value;
+    activateForm.Code = document.getElementById("input-code").value;
 
     // Debug
-    console.log("email: " + activateForm.email)
-    console.log("code: " + activateForm.code)
+    console.log("email: " + activateForm.Email);
+    console.log("code: " + activateForm.Code);
 
     let activateData = {
         method: 'post',
@@ -28,10 +27,11 @@ function activateUser() {
 
     // response code = 200 success, client redirect login on index.html
     // response code = 400 fail, client remains on activation page
-    
+
     fetch(url, activateData)
     .then(function(response) {
-        console.log("Activate data response.");
+        window.location.reload()
+        console.log("Activate response: ");
         return response.json();
     })
     .then(function(data) {
@@ -39,12 +39,12 @@ function activateUser() {
         console.log(data.msg);
         console.log(data.email);
 
-       if (data.code === 200) {
+      if (data.code === 200) {
            window.location.href = "http://localhost:8090/"
        }
     })
     .catch(function(error) {
-        console.log("fetch error: ")
+        console.log("fetch error: ");
         console.log(error);
     });
 }

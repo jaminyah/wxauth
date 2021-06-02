@@ -1,3 +1,3 @@
-module e2ee
+module wxauth/e2ee
 
-go 1.15
+go 1.16

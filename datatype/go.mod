@@ -1,5 +1,3 @@
-module datatype
+module wxauth/datatype
 
-go 1.15
-
-require github.com/mojocn/base64Captcha v1.3.4
+go 1.16

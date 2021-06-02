@@ -1,3 +1,3 @@
-module codegen
+module wxauth/codegen
 
-go 1.15
+go 1.16

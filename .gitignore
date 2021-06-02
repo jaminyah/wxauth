@@ -7,3 +7,5 @@
 
 rice-box.go
 sendgrid.env
+prikey.pem
+pubkey.pem

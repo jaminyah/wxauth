@@ -20,7 +20,7 @@ func StoreEmailPass(addr, passwd string) {
 	})
 
 	addr = addr + "-pwd" // key = "email-pwd"
-	_, err := client.Set(ctx, addr, passwd, 2*time.Hour).Result()
+	_, err := client.Set(ctx, addr, passwd, 2*time.Minute).Result()
 	if err != nil {
 		panic(err)
 	}
@@ -54,8 +54,8 @@ func StoreEmailCode(addr, code string) {
 		DB:       0,
 	})
 
-	addr = addr + "-cd" // key = "email-cd"
-	_, err := client.Set(ctx, addr, code, 30*time.Minute).Result()
+	addr = addr + "-code" // key = "email-cd"
+	_, err := client.Set(ctx, addr, code, 2*time.Minute).Result()
 	if err != nil {
 		panic(err)
 	}
@@ -70,12 +70,12 @@ func ValidateCode(addr, userCode string) bool {
 		DB:       0,
 	})
 
-	addr = addr + "-cd"
+	addr = addr + "-code"
 	cachedCode, err := client.Get(ctx, addr).Result()
 	if err != nil {
 		fmt.Println("redis get error: ", err)
 	}
-	fmt.Printf("email: %s, code: %s", addr, cachedCode)
+	fmt.Printf("ValidateCode - email: %s, code: %s", addr, cachedCode)
 
 	var success bool = false
 	if userCode == cachedCode {

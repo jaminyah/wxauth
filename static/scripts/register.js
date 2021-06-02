@@ -3,7 +3,7 @@
 * https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
 */
 
-import { getPublicKey, publicKeyEncrypt } from './modules/rsakeys.js';
+//import { getPublicKey, publicKeyEncrypt } from './modules/rsakeys.js';
 
 var captchaForm = {
     ShowLineOptions: [],
@@ -346,4 +346,41 @@ function registerUser() {
         console.log(error);
     });
 
+}
+
+/******************************************************** RSA KEYS *****/
+
+function getPublicKey() {
+    console.log("Public Key");
+
+    const url = 'api/public';
+
+    fetch(url) 
+        .then(function(response) {
+            console.log("Response");
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data.pubkey)
+            console.log(data.msg);
+            let rsaPubKey = data.pubkey;
+            window.localStorage.setItem('rsaPublic', rsaPubKey)
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+}
+
+function publicKeyEncrypt(userPass) {
+
+    let encoder = new JSEncrypt({
+        default_key_size: 2048
+    });
+
+    let rsaPubKey = window.localStorage.getItem('rsaPublic')
+ 
+    encoder.setPublicKey(rsaPubKey);
+
+    let encoded = encoder.encrypt(userPass);
+    return encoded;
 }

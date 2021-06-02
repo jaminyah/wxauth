@@ -12,7 +12,7 @@ function getPublicKey() {
         .then(function(data) {
             console.log(data.pubkey)
             console.log(data.msg);
-            rsaPubKey = data.pubkey;
+            let rsaPubKey = data.pubkey;
             window.localStorage.setItem('rsaPublic', rsaPubKey)
         })
         .catch(function(error) {
@@ -26,7 +26,7 @@ function publicKeyEncrypt(userPass) {
         default_key_size: 2048
     });
 
-    rsaPubKey = window.localStorage.getItem('rsaPublic')
+    let rsaPubKey = window.localStorage.getItem('rsaPublic')
  
     encoder.setPublicKey(rsaPubKey);
 

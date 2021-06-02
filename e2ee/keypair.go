@@ -23,7 +23,7 @@ func SendPublicKey(w http.ResponseWriter, r *http.Request) {
 
 func fetchPubKey() []byte {
 
-	pubkey, err := os.ReadFile("../pubkey.pem")
+	pubkey, err := os.ReadFile("pubkey.pem")
 	if err != nil {
 		fmt.Println("Cannot read pubkey.pem")
 	}
