@@ -339,6 +339,7 @@ function registerUser() {
 
        if (data.code === 202) {
            window.location.href = "http://localhost:8090/activate.html"
+           // window.location.href = "http://auth.wxalert.us/activate.html"
        }
     })
     .catch(function(error) {

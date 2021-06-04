@@ -30,20 +30,18 @@ function activateUser() {
 
     fetch(url, activateData)
     .then(function(response) {
-        window.location.reload()
         console.log("Activate response: ");
         return response.json();
-    })
-    .then(function(data) {
+    }).then(function(data) {
         console.log(data.code);
         console.log(data.msg);
         console.log(data.email);
 
       if (data.code === 200) {
            window.location.href = "http://localhost:8090/"
+           //window.location.href = "http://auth.wxalert.us/"       /* Production code */
        }
-    })
-    .catch(function(error) {
+    }).catch(function(error) {
         console.log("fetch error: ");
         console.log(error);
     });
