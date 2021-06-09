@@ -44,3 +44,26 @@ func fetchPubKey() []byte {
 	}
 	return publicKeyBytes
 }
+
+func FetchPriKey() *rsa.PrivateKey {
+
+	prikey, err := os.ReadFile("prikey.pem")
+	if err != nil {
+		fmt.Println("Cannot read prikey.pem")
+	}
+
+	block, _ := pem.Decode([]byte(prikey))
+	pri, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		fmt.Println("Failed: " + err.Error())
+	}
+
+	if err != nil {
+		fmt.Println("Unable to convert to rsa private key")
+	}
+
+	//fmt.Print("Private key")
+	//fmt.Print(pri)
+
+	return pri
+}

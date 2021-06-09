@@ -1,11 +1,15 @@
 package handlers
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"wxauth/datatype"
+	"wxauth/e2ee"
 	"wxauth/redismgr"
 )
 
@@ -37,17 +41,30 @@ func ActivateUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("\nAuth code validated: %v", isValidCode)
 
 	body := map[string]interface{}{"code": 400, "msg": "failed", "email": form.Email}
+
+	var passEncoded string
 	if isValidCode == true {
 		body = map[string]interface{}{"code": 200, "msg": "ok", "email": form.Email}
+		passEncoded = redismgr.FetchPass(emailAddr)
 	}
 
 	//set json response
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json.NewEncoder(w).Encode(body)
 
-	// Save password in db
-	//if isValidCode {
-	// read redis store for password
-	//}
-	fmt.Println("Activate.go - end")
+	fmt.Printf("\nEncrypted password: %s", passEncoded)
+
+	cipherText, _ := base64.StdEncoding.DecodeString(passEncoded)
+	fmt.Print("cipherText: ")
+	fmt.Print(cipherText)
+
+	privateKey := e2ee.FetchPriKey()
+	data, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, cipherText)
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Print("Data: ")
+	fmt.Print(string(data))
+
+	fmt.Println("\nActivate.go - end")
 }

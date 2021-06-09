@@ -379,7 +379,6 @@ function publicKeyEncrypt(userPass) {
     });
 
     let rsaPubKey = window.localStorage.getItem('rsaPublic')
- 
     encoder.setPublicKey(rsaPubKey);
 
     let encoded = encoder.encrypt(userPass);
