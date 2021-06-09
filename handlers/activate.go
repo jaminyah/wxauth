@@ -1,15 +1,11 @@
 package handlers
 
 import (
-	"crypto/rand"
-	"crypto/rsa"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"wxauth/datatype"
-	"wxauth/e2ee"
 	"wxauth/redismgr"
 )
 
@@ -54,17 +50,21 @@ func ActivateUser(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("\nEncrypted password: %s", passEncoded)
 
-	cipherText, _ := base64.StdEncoding.DecodeString(passEncoded)
-	fmt.Print("cipherText: ")
-	fmt.Print(cipherText)
+	// TODO - Write password to the user database
 
-	privateKey := e2ee.FetchPriKey()
-	data, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, cipherText)
-	if err != nil {
-		log.Println(err)
-	}
-	fmt.Print("Data: ")
-	fmt.Print(string(data))
+	/*
+		cipherText, _ := base64.StdEncoding.DecodeString(passEncoded)
+		fmt.Print("cipherText: ")
+		fmt.Print(cipherText)
+
+		privateKey := e2ee.FetchPriKey()
+		data, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, cipherText)
+		if err != nil {
+			log.Println(err)
+		}
+		fmt.Print("Data: ")
+		fmt.Print(string(data))
+	*/
 
 	fmt.Println("\nActivate.go - end")
 }

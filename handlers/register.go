@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"wxauth/codegen"
 	"wxauth/datatype"
+	"wxauth/e2ee"
 
 	//"wxauth/mailmgr"
 	"wxauth/redismgr"
@@ -27,7 +28,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	mailAddr := form.Email
+	//mailAddr := form.Email
 	passEncoded := form.Password
 	numDigits := 6
 
@@ -42,22 +43,20 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	//response := mailmgr.Send(mailAddr, actcode)
 	//fmt.Printf("Mail response: %v", response)
 
-	response := 202 // DEV TESTING
-	body := map[string]interface{}{"code": response, "msg": "failed", "email": form.Email}
+	mailSrvResp := 202 // DEV TESTING
+	body := map[string]interface{}{"code": mailSrvResp, "msg": "failed", "email": form.Email}
 
-	// TODO :- Replace with decoded password
-	userPass := "a1Uasdf9"
-	if response == 202 && isPasswdValid(userPass) {
-		body = map[string]interface{}{"code": response, "msg": "ok", "email": form.Email}
+	redismgr.StoreEmailPass(form.Email, passEncoded)
+	redismgr.StoreEmailCode(form.Email, actCode)
+
+	userPass := e2ee.DecodePasswd(form.Email)
+	if mailSrvResp == 202 && isPasswdValid(userPass) {
+		body = map[string]interface{}{"code": mailSrvResp, "msg": "ok", "email": form.Email}
 	}
 
 	//set json response
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json.NewEncoder(w).Encode(body)
-
-	redismgr.StoreEmailPass(mailAddr, passEncoded)
-	redismgr.StoreEmailCode(mailAddr, actCode)
-
 }
 
 func isPasswdValid(passwd string) bool {

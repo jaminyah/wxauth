@@ -1,13 +1,17 @@
 package e2ee
 
 import (
+	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
+	"wxauth/redismgr"
 )
 
 func SendPublicKey(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +49,7 @@ func fetchPubKey() []byte {
 	return publicKeyBytes
 }
 
-func FetchPriKey() *rsa.PrivateKey {
+func fetchPriKey() *rsa.PrivateKey {
 
 	prikey, err := os.ReadFile("prikey.pem")
 	if err != nil {
@@ -62,8 +66,26 @@ func FetchPriKey() *rsa.PrivateKey {
 		fmt.Println("Unable to convert to rsa private key")
 	}
 
-	//fmt.Print("Private key")
-	//fmt.Print(pri)
-
 	return pri
+}
+
+func DecodePasswd(email string) string {
+
+	passEncoded := redismgr.FetchPass(email)
+
+	//fmt.Printf("\nEncrypted password: %s", passEncoded)
+
+	cipherText, err := base64.StdEncoding.DecodeString(passEncoded)
+	if err != nil {
+		log.Println(err)
+	}
+
+	privateKey := fetchPriKey()
+	data, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, cipherText)
+	if err != nil {
+		log.Println(err)
+	}
+
+	fmt.Printf("Decoded passwrd: %s", string(data))
+	return string(data)
 }
