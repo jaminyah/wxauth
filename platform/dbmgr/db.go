@@ -17,7 +17,7 @@ type DbHandle struct {
 	DB *sql.DB
 }
 
-var dbInstance *DbHandle
+var handle *DbHandle
 var once sync.Once
 var conn *sql.DB
 
@@ -27,11 +27,11 @@ func GetInstance() *DbHandle {
 		if err != nil {
 			log.Fatal("cannot create database: ", err)
 		}
-		//dbInstance = &DbHandle{DB: conn}
-		dbInstance, err = createTable(conn)
-		//defer conn.Close()
+		//handle = &DbHandle{DB: conn}
+		handle, err = createTable(conn)
+		// TODO - defer conn.Close()
 	})
-	return dbInstance
+	return handle
 }
 
 func createTable(db *sql.DB) (*DbHandle, error) {
@@ -40,7 +40,7 @@ func createTable(db *sql.DB) (*DbHandle, error) {
 		CREATE TABLE IF NOT EXISTS "users" (
 			"ID" INTEGER UNIQUE,
 			"Email" TEXT UNIQUE,
-			"Token" TEXT,
+			"PassRSA" TEXT,
 			"Role" TEXT,
 			"Services" TEXT,
 			PRIMARY KEY ("ID" AUTOINCREMENT)

@@ -48,9 +48,10 @@ func ActivateUser(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("\nEncrypted password: %s", passEncoded)
 
-	// TODO - Write password to the user database
+	// Write user object to the database
 	passRSA := redismgr.FetchPass(form.Email)
 	userDm := datatype.UserDataModel{Email: form.Email, PassRSA: passRSA, UserRole: "Client", Services: "Notify"}
 	dbInstance := dbmgr.GetInstance()
 	dbInstance.InsertUser(userDm)
+
 }

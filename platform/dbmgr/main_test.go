@@ -3,8 +3,7 @@ package dbmgr
 import (
 	"os"
 	"testing"
-
-	_ "github.com/mattn/go-sqlite3"
+	//_ "github.com/mattn/go-sqlite3"
 )
 
 const (
@@ -15,7 +14,7 @@ func TestMain(m *testing.M) {
 
 	os.Remove(dbSource)
 
-	// instance := GetInstance()
+	GetInstance()
 
 	os.Exit(m.Run())
 

@@ -9,6 +9,8 @@ import (
 	"wxauth/e2ee"
 	"wxauth/handlers"
 
+	"wxauth/platform/dbmgr"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -18,22 +20,11 @@ const (
 
 func main() {
 
-	os.Remove(dbSource)
+	os.Remove(dbSource) // Development only
+	dbmgr.GetInstance()
 
-	/*
-		conn, err := sql.Open(dbDriver, dbSource)
-		if err != nil {
-			log.Fatal("cannot create database: ", err)
-		}
-		defer conn.Close()
-
-		dbHandle, err = database.CreateTable(conn)
-		if err != nil {
-			log.Fatal("cannot create user table.")
-		}
-	*/
-
-	//router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("static").HTTPBox()))
+	// 	For Production
+	//	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("static").HTTPBox()))
 
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
@@ -42,6 +33,9 @@ func main() {
 	http.HandleFunc("/api/register", handlers.RegisterUser)
 	http.HandleFunc("/api/activate", handlers.ActivateUser)
 	http.HandleFunc("/api/public", e2ee.SendPublicKey)
+
+	// TODO - LOGIN
+	// TODO - LOGOUT
 
 	fmt.Println("Server is at :8090")
 	if err := http.ListenAndServe(":8090", nil); err != nil {
