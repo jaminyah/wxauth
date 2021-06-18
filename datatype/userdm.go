@@ -3,7 +3,7 @@ package datatype
 type UserDataModel struct {
 	ID       int
 	Email    string
-	Token    string
+	PassRSA  string
 	UserRole string
 	Services string
 }

@@ -1,17 +1,40 @@
-package database
+package dbmgr
 
 import (
 	"database/sql"
 	"fmt"
 	"log"
+	"sync"
 	"wxauth/datatype"
+)
+
+const (
+	driver = "sqlite3"
+	source = "./auth.db"
 )
 
 type DbHandle struct {
 	DB *sql.DB
 }
 
-func CreateTable(db *sql.DB) (*DbHandle, error) {
+var dbInstance *DbHandle
+var once sync.Once
+var conn *sql.DB
+
+func GetInstance() *DbHandle {
+	once.Do(func() {
+		conn, err := sql.Open(driver, source)
+		if err != nil {
+			log.Fatal("cannot create database: ", err)
+		}
+		//dbInstance = &DbHandle{DB: conn}
+		dbInstance, err = createTable(conn)
+		//defer conn.Close()
+	})
+	return dbInstance
+}
+
+func createTable(db *sql.DB) (*DbHandle, error) {
 
 	stmt, err := db.Prepare(`
 		CREATE TABLE IF NOT EXISTS "users" (
@@ -38,7 +61,7 @@ func CreateTable(db *sql.DB) (*DbHandle, error) {
 func (handle *DbHandle) InsertUser(user datatype.UserDataModel) error {
 
 	sql, err := handle.DB.Prepare(`
-		INSERT INTO "users" (Email, Token, Role, Services) values (?, ?, ?, ?)
+		INSERT INTO "users" (Email, PassRSA, Role, Services) values (?, ?, ?, ?)
 	`)
 	if err != nil {
 		fmt.Println("Insert user error")
@@ -49,7 +72,7 @@ func (handle *DbHandle) InsertUser(user datatype.UserDataModel) error {
 		fmt.Println(err)
 	}
 
-	_, err = trans.Stmt(sql).Exec(user.Email, user.Token, user.UserRole, user.Services)
+	_, err = trans.Stmt(sql).Exec(user.Email, user.PassRSA, user.UserRole, user.Services)
 	if err != nil {
 		fmt.Println("Doing rollback")
 		trans.Rollback()
@@ -172,17 +195,17 @@ func (handle *DbHandle) GetUser(userEmail string) (datatype.UserDataModel, error
 	}
 	var id int
 	var email string
-	var token string
+	var passrsa string
 	var role string
 	var services string
 
 	for rows.Next() {
 
-		rows.Scan(&id, &email, &token, &role, &services)
+		rows.Scan(&id, &email, &passrsa, &role, &services)
 		user = datatype.UserDataModel{
 			ID:       id,
 			Email:    email,
-			Token:    token,
+			PassRSA:  passrsa,
 			UserRole: role,
 			Services: services,
 		}
@@ -207,16 +230,16 @@ func (handle *DbHandle) ReadUsers() ([]datatype.UserDataModel, error) {
 	}
 	var id int
 	var email string
-	var token string
+	var passrsa string
 	var role string
 	var services string
 
 	for rows.Next() {
-		rows.Scan(&id, &email, &token, &role, &services)
+		rows.Scan(&id, &email, &passrsa, &role, &services)
 		userDm := datatype.UserDataModel{
 			ID:       id,
 			Email:    email,
-			Token:    token,
+			PassRSA:  passrsa,
 			UserRole: role,
 			Services: services,
 		}
@@ -225,4 +248,8 @@ func (handle *DbHandle) ReadUsers() ([]datatype.UserDataModel, error) {
 	rows.Close()
 
 	return userList, err
+}
+
+func CloseConn() {
+	conn.Close()
 }

@@ -1,4 +1,4 @@
-package database
+package dbmgr
 
 import (
 	"log"
@@ -12,7 +12,7 @@ func TestInsertUser(t *testing.T) {
 
 	arg := datatype.UserDataModel{
 		Email:    "jan@mail.com",
-		Token:    "2468",
+		PassRSA:  "2468",
 		UserRole: "Client",
 		Services: "Notify, WebRTC",
 	}
@@ -25,7 +25,7 @@ func TestInsertUser2(t *testing.T) {
 
 	arg := datatype.UserDataModel{
 		Email:    "der@mail.com",
-		Token:    "72019",
+		PassRSA:  "72019",
 		UserRole: "Client",
 		Services: "Notify",
 	}
@@ -38,7 +38,7 @@ func TestGetUser(t *testing.T) {
 
 	arg := datatype.UserDataModel{
 		Email:    "der@mail.com",
-		Token:    "72019",
+		PassRSA:  "72019",
 		UserRole: "Client",
 		Services: "Notify",
 	}
@@ -46,7 +46,7 @@ func TestGetUser(t *testing.T) {
 
 	require.NoError(t, err)
 	require.Equal(t, arg.Email, user.Email)
-	require.Equal(t, arg.Token, user.Token)
+	require.Equal(t, arg.PassRSA, user.PassRSA)
 	require.Equal(t, arg.UserRole, user.UserRole)
 	require.Equal(t, arg.Services, user.Services)
 
@@ -108,7 +108,7 @@ func TestDeleteUser(t *testing.T) {
 
 	arg := datatype.UserDataModel{
 		Email:    "der@mail.com",
-		Token:    "72019",
+		PassRSA:  "72019",
 		UserRole: "Client",
 		Services: "Notify",
 	}

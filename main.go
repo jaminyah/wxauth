@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,26 +8,30 @@ import (
 	"wxauth/captcha"
 	"wxauth/e2ee"
 	"wxauth/handlers"
-	"wxauth/platform/database"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
+const (
+	dbSource = "./auth.db"
+)
+
 func main() {
 
-	os.Remove("./auth.db")
+	os.Remove(dbSource)
 
-	conn, err := sql.Open("sqlite3", "./auth.db")
-	if err != nil {
-		log.Fatal("cannot create database.")
-	}
-	defer conn.Close()
+	/*
+		conn, err := sql.Open(dbDriver, dbSource)
+		if err != nil {
+			log.Fatal("cannot create database: ", err)
+		}
+		defer conn.Close()
 
-	/*userTbl*/
-	_, err = database.CreateTable(conn)
-	if err != nil {
-		log.Fatal("cannot initialize database.")
-	}
+		dbHandle, err = database.CreateTable(conn)
+		if err != nil {
+			log.Fatal("cannot create user table.")
+		}
+	*/
 
 	//router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("static").HTTPBox()))
 

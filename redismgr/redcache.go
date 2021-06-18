@@ -20,7 +20,7 @@ func StoreEmailPass(addr, passwd string) {
 	})
 
 	addr = addr + "-pwd" // key = "email-pwd"
-	_, err := client.Set(ctx, addr, passwd, 2*time.Minute).Result()
+	_, err := client.Set(ctx, addr, passwd, 2*time.Hour).Result()
 	if err != nil {
 		panic(err)
 	}
@@ -55,7 +55,7 @@ func StoreEmailCode(addr, code string) {
 	})
 
 	addr = addr + "-code" // key = "email-cd"
-	_, err := client.Set(ctx, addr, code, 2*time.Minute).Result()
+	_, err := client.Set(ctx, addr, code, 2*time.Hour).Result()
 	if err != nil {
 		panic(err)
 	}

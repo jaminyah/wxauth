@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"wxauth/datatype"
+	"wxauth/platform/dbmgr"
 	"wxauth/redismgr"
 )
 
@@ -28,12 +29,9 @@ func ActivateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	emailAddr := form.Email
-	authCode := form.Code
+	fmt.Printf("Server - email: %s, code: %s\n", form.Email, form.Code)
 
-	fmt.Printf("Server - email: %s, code: %s\n", emailAddr, authCode)
-
-	isValidCode := redismgr.ValidateCode(emailAddr, authCode)
+	isValidCode := redismgr.ValidateCode(form.Email, form.Code)
 	fmt.Printf("\nAuth code validated: %v", isValidCode)
 
 	body := map[string]interface{}{"code": 400, "msg": "failed", "email": form.Email}
@@ -41,7 +39,7 @@ func ActivateUser(w http.ResponseWriter, r *http.Request) {
 	var passEncoded string
 	if isValidCode == true {
 		body = map[string]interface{}{"code": 200, "msg": "ok", "email": form.Email}
-		passEncoded = redismgr.FetchPass(emailAddr)
+		passEncoded = redismgr.FetchPass(form.Email)
 	}
 
 	//set json response
@@ -51,20 +49,8 @@ func ActivateUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("\nEncrypted password: %s", passEncoded)
 
 	// TODO - Write password to the user database
-
-	/*
-		cipherText, _ := base64.StdEncoding.DecodeString(passEncoded)
-		fmt.Print("cipherText: ")
-		fmt.Print(cipherText)
-
-		privateKey := e2ee.FetchPriKey()
-		data, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, cipherText)
-		if err != nil {
-			log.Println(err)
-		}
-		fmt.Print("Data: ")
-		fmt.Print(string(data))
-	*/
-
-	fmt.Println("\nActivate.go - end")
+	passRSA := redismgr.FetchPass(form.Email)
+	userDm := datatype.UserDataModel{Email: form.Email, PassRSA: passRSA, UserRole: "Client", Services: "Notify"}
+	dbInstance := dbmgr.GetInstance()
+	dbInstance.InsertUser(userDm)
 }

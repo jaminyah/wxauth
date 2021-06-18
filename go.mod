@@ -14,7 +14,7 @@ require (
 	wxauth/datatype v0.0.0 // indirect
 	wxauth/e2ee v0.0.0
 	wxauth/handlers v0.0.0-00010101000000-000000000000
-	wxauth/platform/database v0.0.0
+	wxauth/platform/dbmgr v0.0.0
 	wxauth/redismgr v0.0.0 // indirect
 )
 
@@ -27,6 +27,6 @@ replace (
 	wxauth/handlers => ./handlers
 	wxauth/mail => ./mail
 	wxauth/mailmgr => ./mailmgr
-	wxauth/platform/database => ./platform/database
+	wxauth/platform/dbmgr => ./platform/dbmgr
 	wxauth/redismgr => ./redismgr
 )
