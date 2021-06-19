@@ -19,7 +19,6 @@ type DbHandle struct {
 
 var handle *DbHandle
 var once sync.Once
-var conn *sql.DB
 
 func GetInstance() *DbHandle {
 	once.Do(func() {
@@ -29,7 +28,6 @@ func GetInstance() *DbHandle {
 		}
 		//handle = &DbHandle{DB: conn}
 		handle, err = createTable(conn)
-		// TODO - defer conn.Close()
 	})
 	return handle
 }
@@ -251,5 +249,5 @@ func (handle *DbHandle) ReadUsers() ([]datatype.UserDataModel, error) {
 }
 
 func CloseConn() {
-	conn.Close()
+	handle.DB.Close()
 }

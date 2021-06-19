@@ -22,6 +22,7 @@ func main() {
 
 	os.Remove(dbSource) // Development only
 	dbmgr.GetInstance()
+	defer dbmgr.CloseConn()
 
 	// 	For Production
 	//	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("static").HTTPBox()))
