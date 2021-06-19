@@ -76,7 +76,7 @@ func TestUpdateMail(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func TestUpdateToken(t *testing.T) {
+func TestUpdatePassRSA(t *testing.T) {
 
 	current := "jank@mail.com"
 	update := "jYi123"
@@ -86,7 +86,7 @@ func TestUpdateToken(t *testing.T) {
 		log.Fatal("testUpdateToken - get user error")
 	}
 
-	err = handle.UpdateToken(user, update)
+	err = handle.UpdatePassRSA(user, update)
 	require.NoError(t, err)
 }
 
