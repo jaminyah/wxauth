@@ -106,7 +106,7 @@ func (handle *DbHandle) UpdateMail(user datatype.UserDataModel, newEmail string)
 	return err
 }
 
-func (handle *DbHandle) UpdateToken(user datatype.UserDataModel, newToken string) error {
+func (handle *DbHandle) UpdatePassRSA(user datatype.UserDataModel, newToken string) error {
 
 	sql, err := handle.DB.Prepare(`
 		UPDATE users SET Token=? WHERE ID=?
