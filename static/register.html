@@ -69,7 +69,7 @@
                               required />
                             </div>
                             <div class="control">
-                              <a class="button is-success" id="verifyCaptcha" onclick="verifyCaptcha()">Verify</a>
+                              <a class="button is-success" id="verifyCaptcha" onclick="event.preventDefault(); verifyCaptcha()">Verify</a>
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                     </div>
                     <div class="field margin-top10">
                         <p class="control">
-                            <button class="button is-info" id="reg-btn" onclick="registerUser()">Register</button>
+                            <button class="button is-info" id="reg-btn" onclick="event.preventDefault(); registerUser()">Register</button>
                         </p>
                     </div>				
                 </form>

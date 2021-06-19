@@ -11,7 +11,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"wxauth/redismgr"
 )
 
 func SendPublicKey(w http.ResponseWriter, r *http.Request) {
@@ -69,11 +68,10 @@ func fetchPriKey() *rsa.PrivateKey {
 	return pri
 }
 
-func DecodePasswd(email string) string {
+/*
+func DecodeRedisPass(email string) string {
 
 	passEncoded := redismgr.FetchPass(email)
-
-	//fmt.Printf("\nEncrypted password: %s", passEncoded)
 
 	cipherText, err := base64.StdEncoding.DecodeString(passEncoded)
 	if err != nil {
@@ -86,6 +84,23 @@ func DecodePasswd(email string) string {
 		log.Println(err)
 	}
 
-	fmt.Printf("Decoded passwrd: %s", string(data))
+	//fmt.Printf("Decoded passwrd: %s", string(data))
+	return string(data)
+}
+*/
+
+func DecodeRSA(encoded string) string {
+
+	cipherText, err := base64.StdEncoding.DecodeString(encoded)
+	if err != nil {
+		log.Println(err)
+	}
+
+	privateKey := fetchPriKey()
+	data, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, cipherText)
+	if err != nil {
+		log.Println(err)
+	}
+
 	return string(data)
 }

@@ -29,15 +29,15 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	//mailAddr := form.Email
-	passEncoded := form.Password
-	numDigits := 6
+	//passEncoded := form.Password
 
+	numDigits := 6
 	actCode, err := codegen.GenActCode(numDigits)
 	if err != nil {
 		log.Println(err)
 	}
 	fmt.Printf("actcode: %v\n", actCode)
-	fmt.Printf("Register - encoded pass: %s", passEncoded)
+	// fmt.Printf("Register - encoded pass: %s", passEncoded)
 
 	// DEBUG - TEMPORARY SEND NO MAIL
 	//response := mailmgr.Send(mailAddr, actcode)
@@ -46,10 +46,11 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	mailSrvResp := 202 // DEV TESTING
 	body := map[string]interface{}{"code": mailSrvResp, "msg": "failed", "email": form.Email}
 
-	redismgr.StoreEmailPass(form.Email, passEncoded)
+	redismgr.StoreEmailPass(form.Email, form.Password)
 	redismgr.StoreEmailCode(form.Email, actCode)
 
-	userPass := e2ee.DecodePasswd(form.Email)
+	passEncoded := redismgr.FetchPass(form.Email)
+	userPass := e2ee.DecodeRSA(passEncoded)
 	if mailSrvResp == 202 && isPasswdValid(userPass) {
 		body = map[string]interface{}{"code": mailSrvResp, "msg": "ok", "email": form.Email}
 	}

@@ -34,8 +34,8 @@ func main() {
 	http.HandleFunc("/api/register", handlers.RegisterUser)
 	http.HandleFunc("/api/activate", handlers.ActivateUser)
 	http.HandleFunc("/api/public", e2ee.SendPublicKey)
+	http.HandleFunc("/api/login", handlers.Login)
 
-	// TODO - LOGIN
 	// TODO - LOGOUT
 
 	fmt.Println("Server is at :8090")
