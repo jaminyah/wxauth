@@ -25,19 +25,17 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	dbInstance := dbmgr.GetInstance()
-	userDataModel, err := dbInstance.GetUser(form.Email)
+	userModel, err := dbInstance.GetUser(form.Email)
 	if err != nil {
 		fmt.Println("Get user error.")
 	}
-	fmt.Printf("login - db passwrd: %s", userDataModel.PassRSA)
-	// fmt.Printf("login - login form.Password: %s", form.Password)
+	fmt.Printf("login - dbHash: %s", userModel.PassHash)
 
-	loginPass := e2ee.DecodeRSA(form.Password)
-	dbPass := e2ee.DecodeRSA(userDataModel.PassRSA)
+	loginPass := e2ee.DecodeRSA(form.PassRSA)
+	dbHash := userModel.PassHash
 
 	body := map[string]interface{}{"code": 400, "msg": "failed", "email": form.Email}
-
-	if loginPass == dbPass {
+	if e2ee.ComparePass(dbHash, loginPass) {
 		fmt.Println("Login success.")
 		body = map[string]interface{}{"code": 200, "msg": "ok", "email": form.Email}
 	}

@@ -38,7 +38,7 @@ func createTable(db *sql.DB) (*DbHandle, error) {
 		CREATE TABLE IF NOT EXISTS "users" (
 			"ID" INTEGER UNIQUE,
 			"Email" TEXT UNIQUE,
-			"PassRSA" TEXT,
+			"PassHash" TEXT,
 			"Role" TEXT,
 			"Services" TEXT,
 			PRIMARY KEY ("ID" AUTOINCREMENT)
@@ -59,7 +59,7 @@ func createTable(db *sql.DB) (*DbHandle, error) {
 func (handle *DbHandle) InsertUser(user datatype.UserDataModel) error {
 
 	sql, err := handle.DB.Prepare(`
-		INSERT INTO "users" (Email, PassRSA, Role, Services) values (?, ?, ?, ?)
+		INSERT INTO "users" (Email, PassHash, Role, Services) values (?, ?, ?, ?)
 	`)
 	if err != nil {
 		fmt.Println("Insert user error")
@@ -70,7 +70,7 @@ func (handle *DbHandle) InsertUser(user datatype.UserDataModel) error {
 		fmt.Println(err)
 	}
 
-	_, err = trans.Stmt(sql).Exec(user.Email, user.PassRSA, user.UserRole, user.Services)
+	_, err = trans.Stmt(sql).Exec(user.Email, user.PassHash, user.UserRole, user.Services)
 	if err != nil {
 		fmt.Println("Doing rollback")
 		trans.Rollback()
@@ -193,17 +193,17 @@ func (handle *DbHandle) GetUser(userEmail string) (datatype.UserDataModel, error
 	}
 	var id int
 	var email string
-	var passrsa string
+	var passhash string
 	var role string
 	var services string
 
 	for rows.Next() {
 
-		rows.Scan(&id, &email, &passrsa, &role, &services)
+		rows.Scan(&id, &email, &passhash, &role, &services)
 		user = datatype.UserDataModel{
 			ID:       id,
 			Email:    email,
-			PassRSA:  passrsa,
+			PassHash: passhash,
 			UserRole: role,
 			Services: services,
 		}
@@ -228,16 +228,16 @@ func (handle *DbHandle) ReadUsers() ([]datatype.UserDataModel, error) {
 	}
 	var id int
 	var email string
-	var passrsa string
+	var passhash string
 	var role string
 	var services string
 
 	for rows.Next() {
-		rows.Scan(&id, &email, &passrsa, &role, &services)
+		rows.Scan(&id, &email, &passhash, &role, &services)
 		userDm := datatype.UserDataModel{
 			ID:       id,
 			Email:    email,
-			PassRSA:  passrsa,
+			PassHash: passhash,
 			UserRole: role,
 			Services: services,
 		}

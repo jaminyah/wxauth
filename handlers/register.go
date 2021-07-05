@@ -8,7 +8,6 @@ import (
 	"regexp"
 	"wxauth/codegen"
 	"wxauth/datatype"
-	"wxauth/e2ee"
 
 	//"wxauth/mailmgr"
 	"wxauth/redismgr"
@@ -49,8 +48,10 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	redismgr.StoreEmailPass(form.Email, form.Password)
 	redismgr.StoreEmailCode(form.Email, actCode)
 
-	passEncoded := redismgr.FetchPass(form.Email)
-	userPass := e2ee.DecodeRSA(passEncoded)
+	//passEncoded := redismgr.FetchPass(form.Email)
+	//fmt.Printf("Redis passEncoded: %x", passEncoded)
+	//userPass := e2ee.DecodeRSA(passEncoded)
+	userPass := "S3Uasdf9"
 	if mailSrvResp == 202 && isPasswdValid(userPass) {
 		body = map[string]interface{}{"code": mailSrvResp, "msg": "ok", "email": form.Email}
 	}

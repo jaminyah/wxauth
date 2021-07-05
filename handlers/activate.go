@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"wxauth/datatype"
+	"wxauth/e2ee"
 	"wxauth/platform/dbmgr"
 	"wxauth/redismgr"
 )
@@ -36,22 +37,26 @@ func ActivateUser(w http.ResponseWriter, r *http.Request) {
 
 	body := map[string]interface{}{"code": 400, "msg": "failed", "email": form.Email}
 
-	var passEncoded string
+	var passRSA string
 	if isValidCode == true {
 		body = map[string]interface{}{"code": 200, "msg": "ok", "email": form.Email}
-		passEncoded = redismgr.FetchPass(form.Email)
+		passRSA = redismgr.FetchPass(form.Email)
 	}
 
 	//set json response
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json.NewEncoder(w).Encode(body)
 
-	fmt.Printf("\nEncrypted password: %s", passEncoded)
+	fmt.Printf("\nEncrypted password: %s", passRSA)
+	decodedRSA := e2ee.DecodeRSA(passRSA)
+	fmt.Printf("decodedRSA: %s\n", decodedRSA)
 
-	// Write user object to the database
-	passRSA := redismgr.FetchPass(form.Email)
-	userDm := datatype.UserDataModel{Email: form.Email, PassRSA: passRSA, UserRole: "Client", Services: "Notify"}
-	dbInstance := dbmgr.GetInstance()
-	dbInstance.InsertUser(userDm)
-
+	passHash, err := e2ee.PerformHash(decodedRSA)
+	if err == nil {
+		userModel := datatype.UserDataModel{Email: form.Email, PassHash: string(passHash), UserRole: "Client", Services: "Notify"}
+		dbInstance := dbmgr.GetInstance()
+		dbInstance.InsertUser(userModel)
+	} else {
+		log.Println(err)
+	}
 }

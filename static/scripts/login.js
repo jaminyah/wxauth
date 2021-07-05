@@ -1,6 +1,12 @@
 //import { publicKeyEncrypt } from './modules/rsakeys';
 
 /******************************************************** LOGIN USER *****/
+$(document).ready(function() {
+
+    if (window.localStorage.getItem('rsaPublic') === null) {
+        getPublicKey();
+    }
+});
 
 function loginUser() {
     console.log('Login user submit');
@@ -8,12 +14,14 @@ function loginUser() {
 
     var addr = document.getElementById("input-email").value;
     var passwd = document.getElementById("input-passwd").value;
+
     let passEncrypted = publicKeyEncrypt(passwd)
-    console.log(passEncrypted)
+
+    console.log("login.js: " + passEncrypted)
 
     var loginForm = {
-        email: addr,
-        password: passEncrypted
+        Email: addr,
+        PassRSA: passEncrypted
     }
 
     let loginData = {
@@ -48,6 +56,29 @@ function loginUser() {
 
 }
 
+/**************** RSA public key ********************************/
+
+function getPublicKey() {
+    console.log("Public Key");
+
+    const url = 'api/public';
+
+    fetch(url) 
+        .then(function(response) {
+            console.log("Response");
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data.pubkey)
+            console.log(data.msg);
+            let rsaPubKey = data.pubkey;
+            window.localStorage.setItem('rsaPublic', rsaPubKey)
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+}
+
 function publicKeyEncrypt(userPass) {
 
     let encoder = new JSEncrypt({
@@ -55,7 +86,6 @@ function publicKeyEncrypt(userPass) {
     });
 
     let rsaPubKey = window.localStorage.getItem('rsaPublic')
- 
     encoder.setPublicKey(rsaPubKey);
 
     let encoded = encoder.encrypt(userPass);

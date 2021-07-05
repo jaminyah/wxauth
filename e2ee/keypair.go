@@ -11,6 +11,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func SendPublicKey(w http.ResponseWriter, r *http.Request) {
@@ -45,6 +47,7 @@ func fetchPubKey() []byte {
 	if err != nil {
 		fmt.Println("Cannot Marshal pubkey")
 	}
+
 	return publicKeyBytes
 }
 
@@ -56,7 +59,7 @@ func fetchPriKey() *rsa.PrivateKey {
 	}
 
 	block, _ := pem.Decode([]byte(prikey))
-	pri, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	rsaPrivate, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
 		fmt.Println("Failed: " + err.Error())
 	}
@@ -65,29 +68,8 @@ func fetchPriKey() *rsa.PrivateKey {
 		fmt.Println("Unable to convert to rsa private key")
 	}
 
-	return pri
+	return rsaPrivate
 }
-
-/*
-func DecodeRedisPass(email string) string {
-
-	passEncoded := redismgr.FetchPass(email)
-
-	cipherText, err := base64.StdEncoding.DecodeString(passEncoded)
-	if err != nil {
-		log.Println(err)
-	}
-
-	privateKey := fetchPriKey()
-	data, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, cipherText)
-	if err != nil {
-		log.Println(err)
-	}
-
-	//fmt.Printf("Decoded passwrd: %s", string(data))
-	return string(data)
-}
-*/
 
 func DecodeRSA(encoded string) string {
 
@@ -103,4 +85,18 @@ func DecodeRSA(encoded string) string {
 	}
 
 	return string(data)
+}
+
+func PerformHash(passwd string) (string, error) {
+
+	var passwdBytes = []byte(passwd)
+	hashedBytes, err := bcrypt.GenerateFromPassword(passwdBytes, bcrypt.MinCost)
+
+	return string(hashedBytes), err
+}
+
+func ComparePass(dbHash, loginPass string) bool {
+
+	err := bcrypt.CompareHashAndPassword([]byte(dbHash), []byte(loginPass))
+	return err == nil
 }

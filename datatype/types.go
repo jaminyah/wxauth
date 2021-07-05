@@ -27,13 +27,13 @@ type RegisterForm struct {
 }
 
 type LoginForm struct {
-	Email    string
-	Password string
+	Email   string
+	PassRSA string
 }
 
 type User struct {
 	Email    string
-	Password string
+	PassHash string
 	UserRole Role
 	Services []Service
 }
@@ -41,7 +41,7 @@ type User struct {
 type UserDataModel struct {
 	ID       int
 	Email    string
-	PassRSA  string
+	PassHash string
 	UserRole string
 	Services string
 }

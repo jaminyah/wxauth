@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"wxauth/captcha"
 	"wxauth/e2ee"
 	"wxauth/handlers"
@@ -14,13 +13,15 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+/*
 const (
 	dbSource = "./auth.db"
 )
+*/
 
 func main() {
 
-	os.Remove(dbSource) // Development only
+	//os.Remove(dbSource) // Development only
 	dbmgr.GetInstance()
 	defer dbmgr.CloseConn()
 
