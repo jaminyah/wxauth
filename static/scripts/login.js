@@ -17,8 +17,6 @@ function loginUser() {
 
     let passEncrypted = publicKeyEncrypt(passwd)
 
-    console.log("login.js: " + passEncrypted)
-
     var loginForm = {
         Email: addr,
         PassRSA: passEncrypted
