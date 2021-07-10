@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"wxauth/codegen"
 	"wxauth/datatype"
 	"wxauth/e2ee"
 	"wxauth/platform/dbmgr"
@@ -51,12 +52,20 @@ func ActivateUser(w http.ResponseWriter, r *http.Request) {
 	decodedRSA := e2ee.DecodeRSA(passRSA)
 	fmt.Printf("decodedRSA: %s\n", decodedRSA)
 
-	passHash, err := e2ee.PerformHash(decodedRSA)
+	salt, err := codegen.GenActCode(6)
+	if err != nil {
+		log.Println(err)
+	}
+
+	rsaPlusSalt := decodedRSA + salt
+
+	passHash, err := e2ee.PerformHash(rsaPlusSalt)
+	dbInstance := dbmgr.GetInstance()
 	if err == nil {
-		userModel := datatype.UserDataModel{Email: form.Email, PassHash: string(passHash), UserRole: "Client", Services: "Notify"}
-		dbInstance := dbmgr.GetInstance()
+		userModel := datatype.UserDataModel{Email: form.Email, PassHash: string(passHash), Salt: salt, UserRole: "Client", Services: "Notify"}
 		dbInstance.InsertUser(userModel)
 	} else {
 		log.Println(err)
 	}
+
 }

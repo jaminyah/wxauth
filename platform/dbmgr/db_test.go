@@ -13,6 +13,7 @@ func TestInsertUser(t *testing.T) {
 	arg := datatype.UserDataModel{
 		Email:    "jan@mail.com",
 		PassHash: "2468",
+		Salt:     "69127",
 		UserRole: "Client",
 		Services: "Notify, WebRTC",
 	}
@@ -26,6 +27,7 @@ func TestInsertUser2(t *testing.T) {
 	arg := datatype.UserDataModel{
 		Email:    "der@mail.com",
 		PassHash: "72019",
+		Salt:     "204159",
 		UserRole: "Client",
 		Services: "Notify",
 	}
@@ -39,6 +41,7 @@ func TestGetUser(t *testing.T) {
 	arg := datatype.UserDataModel{
 		Email:    "der@mail.com",
 		PassHash: "72019",
+		Salt:     "76157",
 		UserRole: "Client",
 		Services: "Notify",
 	}
@@ -109,10 +112,10 @@ func TestDeleteUser(t *testing.T) {
 	arg := datatype.UserDataModel{
 		Email:    "der@mail.com",
 		PassHash: "72019",
+		Salt:     "76157",
 		UserRole: "Client",
 		Services: "Notify",
 	}
 	err := handle.DeleteUser(arg.Email)
-
 	require.NoError(t, err)
 }

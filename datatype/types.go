@@ -34,6 +34,7 @@ type LoginForm struct {
 type User struct {
 	Email    string
 	PassHash string
+	Salt     string
 	UserRole Role
 	Services []Service
 }
@@ -42,6 +43,7 @@ type UserDataModel struct {
 	ID       int
 	Email    string
 	PassHash string
+	Salt     string
 	UserRole string
 	Services string
 }

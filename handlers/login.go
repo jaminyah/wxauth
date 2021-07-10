@@ -31,11 +31,18 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("login - dbHash: %s", userModel.PassHash)
 
+	// Get user hash salt from db
+	user, err := dbInstance.GetUser(form.Email)
+	if err != nil {
+		log.Println(err)
+	}
+
 	loginPass := e2ee.DecodeRSA(form.PassRSA)
+	loginSalted := loginPass + user.Salt
 	dbHash := userModel.PassHash
 
 	body := map[string]interface{}{"code": 400, "msg": "failed", "email": form.Email}
-	if e2ee.ComparePass(dbHash, loginPass) {
+	if e2ee.ComparePass(dbHash, loginSalted) {
 		fmt.Println("Login success.")
 		body = map[string]interface{}{"code": 200, "msg": "ok", "email": form.Email}
 	}

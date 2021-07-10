@@ -39,6 +39,7 @@ func createTable(db *sql.DB) (*DbHandle, error) {
 			"ID" INTEGER UNIQUE,
 			"Email" TEXT UNIQUE,
 			"PassHash" TEXT,
+			"Salt" TEXT, 
 			"Role" TEXT,
 			"Services" TEXT,
 			PRIMARY KEY ("ID" AUTOINCREMENT)
@@ -59,7 +60,7 @@ func createTable(db *sql.DB) (*DbHandle, error) {
 func (handle *DbHandle) InsertUser(user datatype.UserDataModel) error {
 
 	sql, err := handle.DB.Prepare(`
-		INSERT INTO "users" (Email, PassHash, Role, Services) values (?, ?, ?, ?)
+		INSERT INTO "users" (Email, PassHash, Salt, Role, Services) values (?, ?, ?, ?, ?)
 	`)
 	if err != nil {
 		fmt.Println("Insert user error")
@@ -70,7 +71,7 @@ func (handle *DbHandle) InsertUser(user datatype.UserDataModel) error {
 		fmt.Println(err)
 	}
 
-	_, err = trans.Stmt(sql).Exec(user.Email, user.PassHash, user.UserRole, user.Services)
+	_, err = trans.Stmt(sql).Exec(user.Email, user.PassHash, user.Salt, user.UserRole, user.Services)
 	if err != nil {
 		fmt.Println("Doing rollback")
 		trans.Rollback()
@@ -184,26 +185,26 @@ func (handle *DbHandle) DeleteUser(userEmail string) error {
 func (handle *DbHandle) GetUser(userEmail string) (datatype.UserDataModel, error) {
 
 	user := datatype.UserDataModel{}
-	rows, err := handle.DB.Query(`
-		SELECT * FROM users
-	`)
+	rows, err := handle.DB.Query(`SELECT * FROM users`)
 
 	if err != nil {
 		fmt.Println("Query users failed.")
 	}
 	var id int
 	var email string
-	var passhash string
+	var passHash string
+	var salt string
 	var role string
 	var services string
 
 	for rows.Next() {
 
-		rows.Scan(&id, &email, &passhash, &role, &services)
+		rows.Scan(&id, &email, &passHash, &salt, &role, &services)
 		user = datatype.UserDataModel{
 			ID:       id,
 			Email:    email,
-			PassHash: passhash,
+			PassHash: passHash,
+			Salt:     salt,
 			UserRole: role,
 			Services: services,
 		}
@@ -219,25 +220,25 @@ func (handle *DbHandle) GetUser(userEmail string) (datatype.UserDataModel, error
 func (handle *DbHandle) ReadUsers() ([]datatype.UserDataModel, error) {
 
 	userList := []datatype.UserDataModel{}
-	rows, err := handle.DB.Query(`
-		SELECT * FROM users
-	`)
+	rows, err := handle.DB.Query(`SELECT * FROM users`)
 
 	if err != nil {
 		fmt.Println("Query users failed.")
 	}
 	var id int
 	var email string
-	var passhash string
+	var passHash string
+	var salt string
 	var role string
 	var services string
 
 	for rows.Next() {
-		rows.Scan(&id, &email, &passhash, &role, &services)
+		rows.Scan(&id, &email, &passHash, &salt, &role, &services)
 		userDm := datatype.UserDataModel{
 			ID:       id,
 			Email:    email,
-			PassHash: passhash,
+			PassHash: passHash,
+			Salt:     salt,
 			UserRole: role,
 			Services: services,
 		}
@@ -248,6 +249,20 @@ func (handle *DbHandle) ReadUsers() ([]datatype.UserDataModel, error) {
 	return userList, err
 }
 
+/*
+func (handle *DbHandle) GetUserSalt(userEmail string) (string, error) {
+	sql := "SELECT salt FROM users WHERE email=?"
+
+	return salt, err
+}
+*/
+
 func CloseConn() {
 	handle.DB.Close()
+}
+
+func checkErr(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
